@@ -51,7 +51,7 @@ csv = "1"
 miniz_oxide = "0.9"
 getrandom = "0.4"
 hmac = "0.13"
-jiff = { version = "0.2", features = ["serde", "tzdb-bundle-always"] }
+jiff = { version = "1.0", features = ["serde", "tzdb-bundle-always"] }
 regex = "1"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
