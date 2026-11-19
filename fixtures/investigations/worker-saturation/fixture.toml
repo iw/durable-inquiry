@@ -1,5 +1,5 @@
 # Branch: the cause really is Worker execution capacity. Free Workflow Task
-# slots sit at zero for the whole incident, so Kyumei concludes at the first
+# slots sit at zero for the whole incident, so Durable Inquiry concludes at the first
 # stage — and only then recommends more Workers or slots.
 
 [fixture]

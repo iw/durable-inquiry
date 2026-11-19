@@ -472,7 +472,7 @@ method = "dynamic-config"
 label = "Every matching.numTaskqueueReadPartitions and matching.numTaskqueueWritePartitions entry in your dynamic config, with constraints"
 body = "grep -A 6 -E 'matching\\.numTaskqueue(Read|Write)Partitions' <your-dynamic-config.yaml>"
 claims = ["dc.matching.numTaskqueueReadPartitions", "dc.matching.numTaskqueueWritePartitions"]
-note = "if neither key is set, say so: Kyumei will not assume the default of 4 from an absent entry"
+note = "if neither key is set, say so: Durable Inquiry will not assume the default of 4 from an absent entry"
 
 [[request]]
 id = "signal-rate"

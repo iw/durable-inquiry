@@ -1,0 +1,21 @@
+[package]
+name = "durable-inquiry-sim"
+description = "Simulated Temporal clusters for Durable Inquiry: Durable Envision runs scraped as Prometheus scrapes a cluster, and the PromQL Durable Inquiry's requests use, answered over the scrapes."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[dependencies]
+durable-inquiry-samples.workspace = true
+regex.workspace = true
+durable-envision.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+durable-inquiry-knowledge.workspace = true
+
+[lints]
+workspace = true

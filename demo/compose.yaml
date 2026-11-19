@@ -1,5 +1,5 @@
 # Temporal Server 1.31.2 on PostgreSQL, with the Temporal UI, Prometheus and Grafana, for the
-# Kyumei demo. The Workers and the load run on the host, as RUNBOOK.md describes.
+# Durable Inquiry demo. The Workers and the load run on the host, as RUNBOOK.md describes.
 #
 #   docker compose up -d --wait   start everything; returns once the billing Namespace exists
 #   docker compose down           stop; Temporal's data goes, and -v also deletes Prometheus's
@@ -8,7 +8,7 @@
 # port is published on 127.0.0.1 only, because this Grafana gives anyone who reaches it admin
 # rights.
 
-name: kyumei-demo
+name: durable-inquiry-demo
 
 services:
   postgresql:
@@ -69,7 +69,7 @@ services:
       - ./compose/dynamicconfig.yaml:/etc/temporal/config/dynamicconfig/dynamicconfig.yaml:ro
     ports:
       - 127.0.0.1:7233:7233
-      # The HTTP API, which `kyumei-demo describe` reads.
+      # The HTTP API, which `durable-inquiry-demo describe` reads.
       - 127.0.0.1:7243:7243
 
   # Creates the demo's Namespace once the Frontend is serving.
@@ -128,7 +128,7 @@ services:
     volumes:
       - ./compose/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
       - ./compose/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
-      # The same files `kyumei serve --dashboards` reads. If one is missing, `up` fails rather
+      # The same files `durable-inquiry serve --dashboards` reads. If one is missing, `up` fails rather
       # than creating an empty directory in your checkout.
       - type: bind
         source: ${OPS_DASHBOARDS}/server/temporal-server.json

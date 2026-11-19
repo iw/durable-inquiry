@@ -1,0 +1,2779 @@
+[
+  {
+    "seq": 0,
+    "at": "2026-11-19T18:39:51.691153Z",
+    "event": {
+      "type": "opened",
+      "id": "inv-golden-signal-flood",
+      "title": "Workflow Task schedule-to-start latency is elevated on order-fulfillment",
+      "symptom": {
+        "description": "Since about 13:35 UTC, workflow tasks on the order-fulfillment task queue (namespace commerce-prod) are waiting about 30 seconds before a worker picks them up. Schedule-to-start is normally under 50ms. A batch job started signalling every open order workflow at around the same time. Worker CPU and memory look normal.",
+        "classification": {
+          "signature": "wft-schedule-to-start-elevated",
+          "basis": {
+            "basis": "pattern_match",
+            "pattern": "Schedule-to-start"
+          }
+        },
+        "evidence": "E0"
+      },
+      "symptom_evidence": {
+        "id": "E0",
+        "submitted_at": "2026-11-19T18:39:51.691153Z",
+        "origin": {
+          "kind": "operator",
+          "channel": "symptom"
+        },
+        "responds_to": null,
+        "raw": {
+          "media_type": "text/plain; charset=utf-8",
+          "filename": null,
+          "body": {
+            "kind": "text",
+            "text": "Since about 13:35 UTC, workflow tasks on the order-fulfillment task queue (namespace commerce-prod) are waiting about 30 seconds before a worker picks them up. Schedule-to-start is normally under 50ms. A batch job started signalling every open order workflow at around the same time. Worker CPU and memory look normal."
+          },
+          "sha256": "848165e3418b21561bee9a6af4ab3a55a317aaf694c6136c6a7481bd84f54a7c",
+          "size_bytes": 318
+        },
+        "declared": {
+          "form": null,
+          "window": null,
+          "query": null,
+          "signal": null,
+          "unit": null,
+          "labels": {},
+          "note": null
+        },
+        "interpretation": {
+          "form": "operator_observation",
+          "interpreter": "symptom/1",
+          "observations": [
+            {
+              "id": "E0.O1",
+              "evidence": "E0",
+              "status": "operator_assertion",
+              "subject": {
+                "metric": null,
+                "labels": {},
+                "description": "Symptom description"
+              },
+              "binding": null,
+              "window": null,
+              "value": {
+                "shape": "text",
+                "text": "Since about 13:35 UTC, workflow tasks on the order-fulfillment task queue (namespace commerce-prod) are waiting about 30 seconds before a worker picks them up. Schedule-to-start is normally under 50ms. A batch job started signalling every open order workflow at around the same time. Worker CPU and memory look normal."
+              }
+            },
+            {
+              "id": "E0.O2",
+              "evidence": "E0",
+              "status": "operator_assertion",
+              "subject": {
+                "metric": null,
+                "labels": {},
+                "description": "“about 30 seconds” in the symptom description"
+              },
+              "binding": {
+                "signal": "wft_schedule_to_start",
+                "basis": {
+                  "basis": "symptom_text",
+                  "matched": "Schedule-to-start"
+                },
+                "claim": null
+              },
+              "window": null,
+              "value": {
+                "shape": "scalar",
+                "unit": "seconds",
+                "value": 30.0,
+                "statistic": "typical"
+              }
+            }
+          ],
+          "notes": [
+            {
+              "severity": "info",
+              "text": "Read “about 30 seconds” as the operator's estimate of Workflow Task schedule-to-start latency.",
+              "observation": "E0.O2"
+            }
+          ]
+        }
+      },
+      "environment": {
+        "server_version": {
+          "value": {
+            "major": 1,
+            "minor": 31,
+            "patch": 0
+          },
+          "status": "operator_assertion",
+          "source": {
+            "kind": "operator",
+            "at": "2026-11-19T18:39:51.691153Z"
+          }
+        },
+        "sdks": [
+          {
+            "value": {
+              "language": "python",
+              "version": "1.25.0"
+            },
+            "status": "operator_assertion",
+            "source": {
+              "kind": "operator",
+              "at": "2026-11-19T18:39:51.691153Z"
+            }
+          }
+        ],
+        "topology": {
+          "value": {
+            "deployment": "self_hosted_kubernetes",
+            "frontend_hosts": 4,
+            "history_hosts": 6,
+            "matching_hosts": 4,
+            "worker_processes": 12,
+            "persistence": "PostgreSQL 16",
+            "notes": null
+          },
+          "status": "operator_assertion",
+          "source": {
+            "kind": "operator",
+            "at": "2026-11-19T18:39:51.691153Z"
+          }
+        }
+      },
+      "scope": {
+        "namespaces": [
+          "commerce-prod"
+        ],
+        "task_queues": [
+          "order-fulfillment"
+        ]
+      },
+      "window": {
+        "start": "2026-09-30T13:35:00Z",
+        "end": "2026-09-30T13:50:00Z",
+        "description": null
+      }
+    }
+  },
+  {
+    "seq": 1,
+    "at": "2026-11-19T18:39:51.691153Z",
+    "event": {
+      "type": "assessed",
+      "trigger": {
+        "trigger": "opened"
+      },
+      "pack": {
+        "id": "temporal-1.31",
+        "version": "0.1.0",
+        "digest": "8835010b1f8fb689843c6e22938739012391604c19a19a52d58cd11f6388cdf6"
+      },
+      "engine": "kyumei-diagnostics/0.1.0",
+      "states": {
+        "dispatch-rate-ceiling": {
+          "state": "candidate",
+          "contested": false
+        },
+        "history-dispatch-delay": {
+          "state": "candidate",
+          "contested": false
+        },
+        "matching-backlog": {
+          "state": "candidate",
+          "contested": false
+        },
+        "partition-write-read-mismatch": {
+          "state": "candidate",
+          "contested": false
+        },
+        "poll-throttling": {
+          "state": "candidate",
+          "contested": false
+        },
+        "poller-starvation": {
+          "state": "candidate",
+          "contested": false
+        },
+        "pollers-absent": {
+          "state": "candidate",
+          "contested": false
+        },
+        "signal-flood": {
+          "state": "candidate",
+          "contested": false
+        },
+        "worker-slot-exhaustion": {
+          "state": "candidate",
+          "contested": false
+        }
+      },
+      "transitions": [
+        {
+          "hypothesis": "worker-slot-exhaustion",
+          "from": null,
+          "to": "candidate",
+          "because": []
+        },
+        {
+          "hypothesis": "poller-starvation",
+          "from": null,
+          "to": "candidate",
+          "because": []
+        },
+        {
+          "hypothesis": "pollers-absent",
+          "from": null,
+          "to": "candidate",
+          "because": []
+        },
+        {
+          "hypothesis": "poll-throttling",
+          "from": null,
+          "to": "candidate",
+          "because": []
+        },
+        {
+          "hypothesis": "matching-backlog",
+          "from": null,
+          "to": "candidate",
+          "because": []
+        },
+        {
+          "hypothesis": "history-dispatch-delay",
+          "from": null,
+          "to": "candidate",
+          "because": []
+        },
+        {
+          "hypothesis": "dispatch-rate-ceiling",
+          "from": null,
+          "to": "candidate",
+          "because": []
+        },
+        {
+          "hypothesis": "partition-write-read-mismatch",
+          "from": null,
+          "to": "candidate",
+          "because": []
+        },
+        {
+          "hypothesis": "signal-flood",
+          "from": null,
+          "to": "candidate",
+          "because": []
+        }
+      ],
+      "findings": [],
+      "next_request": "workflow-worker-slots",
+      "conclusion": null
+    }
+  },
+  {
+    "seq": 2,
+    "at": "2026-11-19T18:39:51.691153Z",
+    "event": {
+      "type": "evidence_requested",
+      "id": "R1",
+      "definition": "workflow-worker-slots",
+      "issued_at": "2026-11-19T18:39:51.691153Z",
+      "title": "Free Workflow Task slots across Workers",
+      "why": "Schedule-to-start is how long a task waits for a Worker to start it. A Worker only polls when it can reserve a free Workflow Task slot, so if every Worker had used all its slots, tasks would wait — the one cause more Workers would fix. This single query confirms or rules that out.",
+      "collect": [
+        {
+          "method": "promql",
+          "label": "Free Workflow Task slots, summed across Workers (range query, step 15s) — every SDK exports this gauge under this name; the Java SDK only when its slot supplier has a maximum — matches `commerce-prod` also as `commerce_prod` and `order-fulfillment` also as `order_fulfillment`, the spelling tally writes",
+          "body": "sum by (task_queue) (temporal_worker_task_slots_available{worker_type=\"WorkflowWorker\", namespace=~\"commerce-prod|commerce_prod\", task_queue=~\"order-fulfillment|order_fulfillment\"})",
+          "applies_to": null,
+          "unit": "count",
+          "claims": [
+            "sdk.worker_task_slots_available",
+            "sdk.go-tally-label-values"
+          ],
+          "unfilled": []
+        }
+      ],
+      "window": {
+        "window": {
+          "start": "2026-09-30T13:25:00Z",
+          "end": "2026-09-30T13:55:00Z"
+        },
+        "text": "2026-09-30 13:25–13:55 UTC (the incident window plus 10 min before and 5 min after)"
+      },
+      "group_by": [
+        "task_queue"
+      ],
+      "distinguishes": [
+        "worker-slot-exhaustion"
+      ],
+      "expected_signals": [
+        "workflow_slots_available"
+      ],
+      "responses": [],
+      "status": {
+        "status": "open"
+      }
+    }
+  },
+  {
+    "seq": 3,
+    "at": "2026-11-19T18:39:52.1291Z",
+    "event": {
+      "type": "evidence_submitted",
+      "id": "E1",
+      "submitted_at": "2026-11-19T18:39:52.1291Z",
+      "origin": {
+        "kind": "collector",
+        "name": "kyumei",
+        "version": "0.1.0"
+      },
+      "responds_to": "R1",
+      "raw": {
+        "media_type": "text/plain",
+        "filename": null,
+        "body": {
+          "kind": "text",
+          "text": "-----BEGIN KYUMEI SAMPLES v1-----\nCollected by kyumei 0.1.0 from prometheus at 2026-11-19 18:39 UTC\nRequest R1 of inv-golden-signal-flood, 2026-09-30 13:25 UTC to 2026-09-30 13:55 UTC, step 15s\nQuery 1: sum by (task_queue) (temporal_worker_task_slots_available{worker_type=\"WorkflowWorker\", n…\n  task_queue=order-fulfillment  █████████▆▃▃▃▂▃▃▂▃▂▃▃▃▂▃▃▃▁▂▇███  min 1071  max 1196  mean 1140  (61 samples)\n:pY-xSsNQFIZzY0R6sVIFKShIDA62NaUVXIT4AopiHYqKhNvmtAm9Nzfem9tSrD6Fg1MdxQdwlU7i\n:KrgK4uoLODgYK6WCo2f7_vP__OdsHx4gbbrVVQwCs1QsF0s4EpxB7IOSH5cvT_d-NgjbdpNTD0Jb\n:Bs2QULtBOff0Snlw_X7T9wefD7d9_0pp6A5Jxcxa11yNiWy5pwoU5BIAFnFBqNvhogXCHS4l5bF0\n:SZsElNQonI123Qgcq5pAUtKpDkVrzQwJAxmROjgXVp0zBqIOdnKp1xuR-02Jc9ycWLnwQNgNRRsB\n:pQzCuDdU3F-KdZ5DCI9Ts38yzs-br88T2j_mcS6jpTSc0id1ZOA0NiaQKqzv7_DdY3qS2bJRvrC4\n:UAmOlqc2VpayOD-v7xmbzhsyNJyeQfoX\n-----END KYUMEI SAMPLES (412 chars, crc32 6bcfd10a)-----\n"
+        },
+        "sha256": "134a6899fd45840bca9fb7cd92cb1192e1bde61589766aa90e81c2b4fb48a773",
+        "size_bytes": 951
+      },
+      "declared": {
+        "form": "sample_block",
+        "window": null,
+        "query": null,
+        "signal": null,
+        "unit": null,
+        "labels": {},
+        "note": null
+      },
+      "interpretation": {
+        "form": "sample_block",
+        "interpreter": "sample-block/1",
+        "observations": [
+          {
+            "id": "E1.O1",
+            "evidence": "E1",
+            "status": "observed_fact",
+            "subject": {
+              "metric": null,
+              "labels": {
+                "task_queue": "order-fulfillment"
+              },
+              "description": null
+            },
+            "binding": {
+              "signal": "workflow_slots_available",
+              "basis": {
+                "basis": "metric_name",
+                "exposed_name": "temporal_worker_task_slots_available"
+              },
+              "claim": "sdk.worker_task_slots_available"
+            },
+            "window": {
+              "start": "2026-09-30T13:25:00Z",
+              "end": "2026-09-30T13:55:00Z"
+            },
+            "value": {
+              "shape": "series",
+              "unit": "count",
+              "points": [
+                {
+                  "at": "2026-09-30T13:25:00Z",
+                  "value": 1188.0
+                },
+                {
+                  "at": "2026-09-30T13:25:30Z",
+                  "value": 1196.0
+                },
+                {
+                  "at": "2026-09-30T13:26:00Z",
+                  "value": 1196.0
+                },
+                {
+                  "at": "2026-09-30T13:26:30Z",
+                  "value": 1191.0
+                },
+                {
+                  "at": "2026-09-30T13:27:00Z",
+                  "value": 1191.0
+                },
+                {
+                  "at": "2026-09-30T13:27:30Z",
+                  "value": 1196.0
+                },
+                {
+                  "at": "2026-09-30T13:28:00Z",
+                  "value": 1191.0
+                },
+                {
+                  "at": "2026-09-30T13:28:30Z",
+                  "value": 1192.0
+                },
+                {
+                  "at": "2026-09-30T13:29:00Z",
+                  "value": 1189.0
+                },
+                {
+                  "at": "2026-09-30T13:29:30Z",
+                  "value": 1190.0
+                },
+                {
+                  "at": "2026-09-30T13:30:00Z",
+                  "value": 1189.0
+                },
+                {
+                  "at": "2026-09-30T13:30:30Z",
+                  "value": 1191.0
+                },
+                {
+                  "at": "2026-09-30T13:31:00Z",
+                  "value": 1196.0
+                },
+                {
+                  "at": "2026-09-30T13:31:30Z",
+                  "value": 1189.0
+                },
+                {
+                  "at": "2026-09-30T13:32:00Z",
+                  "value": 1194.0
+                },
+                {
+                  "at": "2026-09-30T13:32:30Z",
+                  "value": 1196.0
+                },
+                {
+                  "at": "2026-09-30T13:33:00Z",
+                  "value": 1194.0
+                },
+                {
+                  "at": "2026-09-30T13:33:30Z",
+                  "value": 1193.0
+                },
+                {
+                  "at": "2026-09-30T13:34:00Z",
+                  "value": 1134.0
+                },
+                {
+                  "at": "2026-09-30T13:34:30Z",
+                  "value": 1112.0
+                },
+                {
+                  "at": "2026-09-30T13:35:00Z",
+                  "value": 1137.0
+                },
+                {
+                  "at": "2026-09-30T13:35:30Z",
+                  "value": 1096.0
+                },
+                {
+                  "at": "2026-09-30T13:36:00Z",
+                  "value": 1134.0
+                },
+                {
+                  "at": "2026-09-30T13:36:30Z",
+                  "value": 1078.0
+                },
+                {
+                  "at": "2026-09-30T13:37:00Z",
+                  "value": 1117.0
+                },
+                {
+                  "at": "2026-09-30T13:37:30Z",
+                  "value": 1071.0
+                },
+                {
+                  "at": "2026-09-30T13:38:00Z",
+                  "value": 1125.0
+                },
+                {
+                  "at": "2026-09-30T13:38:30Z",
+                  "value": 1078.0
+                },
+                {
+                  "at": "2026-09-30T13:39:00Z",
+                  "value": 1086.0
+                },
+                {
+                  "at": "2026-09-30T13:39:30Z",
+                  "value": 1117.0
+                },
+                {
+                  "at": "2026-09-30T13:40:00Z",
+                  "value": 1094.0
+                },
+                {
+                  "at": "2026-09-30T13:40:30Z",
+                  "value": 1093.0
+                },
+                {
+                  "at": "2026-09-30T13:41:00Z",
+                  "value": 1114.0
+                },
+                {
+                  "at": "2026-09-30T13:41:30Z",
+                  "value": 1092.0
+                },
+                {
+                  "at": "2026-09-30T13:42:00Z",
+                  "value": 1078.0
+                },
+                {
+                  "at": "2026-09-30T13:42:30Z",
+                  "value": 1091.0
+                },
+                {
+                  "at": "2026-09-30T13:43:00Z",
+                  "value": 1132.0
+                },
+                {
+                  "at": "2026-09-30T13:43:30Z",
+                  "value": 1079.0
+                },
+                {
+                  "at": "2026-09-30T13:44:00Z",
+                  "value": 1124.0
+                },
+                {
+                  "at": "2026-09-30T13:44:30Z",
+                  "value": 1107.0
+                },
+                {
+                  "at": "2026-09-30T13:45:00Z",
+                  "value": 1103.0
+                },
+                {
+                  "at": "2026-09-30T13:45:30Z",
+                  "value": 1076.0
+                },
+                {
+                  "at": "2026-09-30T13:46:00Z",
+                  "value": 1094.0
+                },
+                {
+                  "at": "2026-09-30T13:46:30Z",
+                  "value": 1109.0
+                },
+                {
+                  "at": "2026-09-30T13:47:00Z",
+                  "value": 1097.0
+                },
+                {
+                  "at": "2026-09-30T13:47:30Z",
+                  "value": 1102.0
+                },
+                {
+                  "at": "2026-09-30T13:48:00Z",
+                  "value": 1123.0
+                },
+                {
+                  "at": "2026-09-30T13:48:30Z",
+                  "value": 1112.0
+                },
+                {
+                  "at": "2026-09-30T13:49:00Z",
+                  "value": 1113.0
+                },
+                {
+                  "at": "2026-09-30T13:49:30Z",
+                  "value": 1073.0
+                },
+                {
+                  "at": "2026-09-30T13:50:00Z",
+                  "value": 1075.0
+                },
+                {
+                  "at": "2026-09-30T13:50:30Z",
+                  "value": 1104.0
+                },
+                {
+                  "at": "2026-09-30T13:51:00Z",
+                  "value": 1073.0
+                },
+                {
+                  "at": "2026-09-30T13:51:30Z",
+                  "value": 1186.0
+                },
+                {
+                  "at": "2026-09-30T13:52:00Z",
+                  "value": 1188.0
+                },
+                {
+                  "at": "2026-09-30T13:52:30Z",
+                  "value": 1188.0
+                },
+                {
+                  "at": "2026-09-30T13:53:00Z",
+                  "value": 1193.0
+                },
+                {
+                  "at": "2026-09-30T13:53:30Z",
+                  "value": 1186.0
+                },
+                {
+                  "at": "2026-09-30T13:54:00Z",
+                  "value": 1193.0
+                },
+                {
+                  "at": "2026-09-30T13:54:30Z",
+                  "value": 1192.0
+                },
+                {
+                  "at": "2026-09-30T13:55:00Z",
+                  "value": 1193.0
+                }
+              ]
+            }
+          }
+        ],
+        "notes": [
+          {
+            "severity": "info",
+            "text": "Collected by kyumei 0.1.0 from prometheus at 2026-11-19 18:39 UTC.",
+            "observation": null
+          }
+        ]
+      }
+    }
+  },
+  {
+    "seq": 4,
+    "at": "2026-11-19T18:39:52.1291Z",
+    "event": {
+      "type": "assessed",
+      "trigger": {
+        "trigger": "evidence",
+        "evidence": "E1"
+      },
+      "pack": {
+        "id": "temporal-1.31",
+        "version": "0.1.0",
+        "digest": "8835010b1f8fb689843c6e22938739012391604c19a19a52d58cd11f6388cdf6"
+      },
+      "engine": "kyumei-diagnostics/0.1.0",
+      "states": {
+        "dispatch-rate-ceiling": {
+          "state": "candidate",
+          "contested": false
+        },
+        "history-dispatch-delay": {
+          "state": "candidate",
+          "contested": false
+        },
+        "matching-backlog": {
+          "state": "candidate",
+          "contested": false
+        },
+        "partition-write-read-mismatch": {
+          "state": "candidate",
+          "contested": false
+        },
+        "poll-throttling": {
+          "state": "candidate",
+          "contested": false
+        },
+        "poller-starvation": {
+          "state": "candidate",
+          "contested": false
+        },
+        "pollers-absent": {
+          "state": "candidate",
+          "contested": false
+        },
+        "signal-flood": {
+          "state": "candidate",
+          "contested": false
+        },
+        "worker-slot-exhaustion": {
+          "state": "eliminated",
+          "contested": false
+        }
+      },
+      "transitions": [
+        {
+          "hypothesis": "worker-slot-exhaustion",
+          "from": "candidate",
+          "to": "eliminated",
+          "because": [
+            "F-slots-headroom"
+          ]
+        }
+      ],
+      "findings": [
+        "F-slots-headroom"
+      ],
+      "next_request": "workflow-pollers",
+      "conclusion": null
+    }
+  },
+  {
+    "seq": 5,
+    "at": "2026-11-19T18:39:52.1291Z",
+    "event": {
+      "type": "request_answered",
+      "request": "R1"
+    }
+  },
+  {
+    "seq": 6,
+    "at": "2026-11-19T18:39:52.1291Z",
+    "event": {
+      "type": "evidence_requested",
+      "id": "R2",
+      "definition": "workflow-pollers",
+      "issued_at": "2026-11-19T18:39:52.1291Z",
+      "title": "Workflow Task pollers and poll results",
+      "why": "The next question is whether polls reached Matching fast enough. Poller count against tasks received per second shows whether pollers were saturated or waiting for work, and whether any Worker was polling at all.",
+      "collect": [
+        {
+          "method": "promql",
+          "label": "Normal-queue Workflow Task pollers, summed across Workers — matches `commerce-prod` also as `commerce_prod` and `order-fulfillment` also as `order_fulfillment`, the spelling tally writes",
+          "body": "sum(temporal_num_pollers{poller_type=\"workflow_task\", namespace=~\"commerce-prod|commerce_prod\", task_queue=~\"order-fulfillment|order_fulfillment\"})",
+          "applies_to": null,
+          "unit": "count",
+          "claims": [
+            "sdk.num_pollers",
+            "sdk.go-tally-label-values"
+          ],
+          "unfilled": []
+        },
+        {
+          "method": "promql",
+          "label": "Workflow Task polls returning a task, per second — the name gains _total with Core's counters_total_suffix, tally's NewPrometheusNamingScope or OpenTelemetry's UseMonotonicCounters — matches `commerce-prod` also as `commerce_prod` and `order-fulfillment` also as `order_fulfillment`, the spelling tally writes",
+          "body": "sum(rate(temporal_workflow_task_queue_poll_succeed{namespace=~\"commerce-prod|commerce_prod\", task_queue=~\"order-fulfillment|order_fulfillment\"}[1m]))",
+          "applies_to": null,
+          "unit": "per_second",
+          "claims": [
+            "sdk.workflow_task_queue_poll_succeed",
+            "sdk.go-tally-label-values"
+          ],
+          "unfilled": []
+        }
+      ],
+      "window": {
+        "window": {
+          "start": "2026-09-30T13:25:00Z",
+          "end": "2026-09-30T13:55:00Z"
+        },
+        "text": "2026-09-30 13:25–13:55 UTC (the incident window plus 10 min before and 5 min after)"
+      },
+      "group_by": [
+        "task_queue"
+      ],
+      "distinguishes": [
+        "pollers-absent",
+        "poller-starvation"
+      ],
+      "expected_signals": [
+        "wft_pollers",
+        "wft_poll_succeed_rate"
+      ],
+      "responses": [],
+      "status": {
+        "status": "open"
+      }
+    }
+  },
+  {
+    "seq": 7,
+    "at": "2026-11-19T18:39:52.165966Z",
+    "event": {
+      "type": "evidence_submitted",
+      "id": "E2",
+      "submitted_at": "2026-11-19T18:39:52.165966Z",
+      "origin": {
+        "kind": "operator",
+        "channel": "paste"
+      },
+      "responds_to": "R2",
+      "raw": {
+        "media_type": "text/plain; charset=utf-8",
+        "filename": null,
+        "body": {
+          "kind": "text",
+          "text": "\"Time\",\"temporal_num_pollers{poller_type=\"\"workflow_task\"\"}\",\"temporal_workflow_task_queue_poll_succeed\"\n2026-09-30 13:25:00,12,40.2\n2026-09-30 13:25:30,12,43.7\n2026-09-30 13:26:00,12,40.0\n2026-09-30 13:26:30,12,40.1\n2026-09-30 13:27:00,12,40.1\n2026-09-30 13:27:30,12,39.1\n2026-09-30 13:28:00,12,42.0\n2026-09-30 13:28:30,12,43.3\n2026-09-30 13:29:00,12,43.8\n2026-09-30 13:29:30,12,39.9\n2026-09-30 13:30:00,12,39.3\n2026-09-30 13:30:30,12,38.9\n2026-09-30 13:31:00,12,40.6\n2026-09-30 13:31:30,12,38.6\n2026-09-30 13:32:00,12,42.4\n2026-09-30 13:32:30,12,39.7\n2026-09-30 13:33:00,12,42.8\n2026-09-30 13:33:30,12,38.8\n2026-09-30 13:34:00,12,41.6\n2026-09-30 13:34:30,12,43.2\n2026-09-30 13:35:00,12,1986.5\n2026-09-30 13:35:30,12,1991.0\n2026-09-30 13:36:00,12,1999.7\n2026-09-30 13:36:30,12,1987.3\n2026-09-30 13:37:00,12,1998.0\n2026-09-30 13:37:30,12,1998.2\n2026-09-30 13:38:00,12,1997.8\n2026-09-30 13:38:30,12,2000.7\n2026-09-30 13:39:00,12,1987.3\n2026-09-30 13:39:30,12,1993.4\n2026-09-30 13:40:00,12,1995.0\n2026-09-30 13:40:30,12,1992.3\n2026-09-30 13:41:00,12,1991.8\n2026-09-30 13:41:30,12,1992.7\n2026-09-30 13:42:00,12,2001.7\n2026-09-30 13:42:30,12,1999.1\n2026-09-30 13:43:00,12,1999.5\n2026-09-30 13:43:30,12,1999.0\n2026-09-30 13:44:00,12,2000.9\n2026-09-30 13:44:30,12,1988.2\n2026-09-30 13:45:00,12,2000.7\n2026-09-30 13:45:30,12,1993.4\n2026-09-30 13:46:00,12,1991.9\n2026-09-30 13:46:30,12,1998.7\n2026-09-30 13:47:00,12,1996.8\n2026-09-30 13:47:30,12,2000.8\n2026-09-30 13:48:00,12,2001.0\n2026-09-30 13:48:30,12,1998.3\n2026-09-30 13:49:00,12,1987.1\n2026-09-30 13:49:30,12,1997.7\n2026-09-30 13:50:00,12,1991.8\n2026-09-30 13:50:30,12,2000.1\n2026-09-30 13:51:00,12,1991.4\n2026-09-30 13:51:30,12,1215.3\n2026-09-30 13:52:00,12,1213.5\n2026-09-30 13:52:30,12,1227.0\n2026-09-30 13:53:00,12,1229.5\n2026-09-30 13:53:30,12,1237.7\n2026-09-30 13:54:00,12,1205.4\n2026-09-30 13:54:30,12,1210.6\n2026-09-30 13:55:00,12,1215.4\n"
+        },
+        "sha256": "b41326692e723adb51e3aeb292b7daacc78e0207c53ff989a14ef60a98db3f59",
+        "size_bytes": 1895
+      },
+      "declared": {
+        "form": null,
+        "window": null,
+        "query": "sum(temporal_num_pollers{poller_type=\"workflow_task\", namespace=\"commerce-prod\", task_queue=\"order-fulfillment\"}) and sum(rate(temporal_workflow_task_queue_poll_succeed{namespace=\"commerce-prod\", task_queue=\"order-fulfillment\"}[1m]))",
+        "signal": null,
+        "unit": null,
+        "labels": {},
+        "note": null
+      },
+      "interpretation": {
+        "form": "csv",
+        "interpreter": "series/1",
+        "observations": [
+          {
+            "id": "E2.O1",
+            "evidence": "E2",
+            "status": "observed_fact",
+            "subject": {
+              "metric": "temporal_num_pollers",
+              "labels": {
+                "poller_type": "workflow_task"
+              },
+              "description": null
+            },
+            "binding": {
+              "signal": "wft_pollers",
+              "basis": {
+                "basis": "metric_name",
+                "exposed_name": "temporal_num_pollers"
+              },
+              "claim": "sdk.num_pollers"
+            },
+            "window": {
+              "start": "2026-09-30T13:25:00Z",
+              "end": "2026-09-30T13:55:00Z"
+            },
+            "value": {
+              "shape": "series",
+              "unit": "count",
+              "points": [
+                {
+                  "at": "2026-09-30T13:25:00Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:25:30Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:26:00Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:26:30Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:27:00Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:27:30Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:28:00Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:28:30Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:29:00Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:29:30Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:30:00Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:30:30Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:31:00Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:31:30Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:32:00Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:32:30Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:33:00Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:33:30Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:34:00Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:34:30Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:35:00Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:35:30Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:36:00Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:36:30Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:37:00Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:37:30Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:38:00Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:38:30Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:39:00Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:39:30Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:40:00Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:40:30Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:41:00Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:41:30Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:42:00Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:42:30Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:43:00Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:43:30Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:44:00Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:44:30Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:45:00Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:45:30Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:46:00Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:46:30Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:47:00Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:47:30Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:48:00Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:48:30Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:49:00Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:49:30Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:50:00Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:50:30Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:51:00Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:51:30Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:52:00Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:52:30Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:53:00Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:53:30Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:54:00Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:54:30Z",
+                  "value": 12.0
+                },
+                {
+                  "at": "2026-09-30T13:55:00Z",
+                  "value": 12.0
+                }
+              ]
+            }
+          },
+          {
+            "id": "E2.O2",
+            "evidence": "E2",
+            "status": "observed_fact",
+            "subject": {
+              "metric": "temporal_workflow_task_queue_poll_succeed",
+              "labels": {},
+              "description": null
+            },
+            "binding": {
+              "signal": "wft_poll_succeed_rate",
+              "basis": {
+                "basis": "metric_name",
+                "exposed_name": "temporal_workflow_task_queue_poll_succeed"
+              },
+              "claim": "sdk.workflow_task_queue_poll_succeed"
+            },
+            "window": {
+              "start": "2026-09-30T13:25:00Z",
+              "end": "2026-09-30T13:55:00Z"
+            },
+            "value": {
+              "shape": "series",
+              "unit": "per_second",
+              "points": [
+                {
+                  "at": "2026-09-30T13:25:00Z",
+                  "value": 40.2
+                },
+                {
+                  "at": "2026-09-30T13:25:30Z",
+                  "value": 43.7
+                },
+                {
+                  "at": "2026-09-30T13:26:00Z",
+                  "value": 40.0
+                },
+                {
+                  "at": "2026-09-30T13:26:30Z",
+                  "value": 40.1
+                },
+                {
+                  "at": "2026-09-30T13:27:00Z",
+                  "value": 40.1
+                },
+                {
+                  "at": "2026-09-30T13:27:30Z",
+                  "value": 39.1
+                },
+                {
+                  "at": "2026-09-30T13:28:00Z",
+                  "value": 42.0
+                },
+                {
+                  "at": "2026-09-30T13:28:30Z",
+                  "value": 43.3
+                },
+                {
+                  "at": "2026-09-30T13:29:00Z",
+                  "value": 43.8
+                },
+                {
+                  "at": "2026-09-30T13:29:30Z",
+                  "value": 39.9
+                },
+                {
+                  "at": "2026-09-30T13:30:00Z",
+                  "value": 39.3
+                },
+                {
+                  "at": "2026-09-30T13:30:30Z",
+                  "value": 38.9
+                },
+                {
+                  "at": "2026-09-30T13:31:00Z",
+                  "value": 40.6
+                },
+                {
+                  "at": "2026-09-30T13:31:30Z",
+                  "value": 38.6
+                },
+                {
+                  "at": "2026-09-30T13:32:00Z",
+                  "value": 42.4
+                },
+                {
+                  "at": "2026-09-30T13:32:30Z",
+                  "value": 39.7
+                },
+                {
+                  "at": "2026-09-30T13:33:00Z",
+                  "value": 42.8
+                },
+                {
+                  "at": "2026-09-30T13:33:30Z",
+                  "value": 38.8
+                },
+                {
+                  "at": "2026-09-30T13:34:00Z",
+                  "value": 41.6
+                },
+                {
+                  "at": "2026-09-30T13:34:30Z",
+                  "value": 43.2
+                },
+                {
+                  "at": "2026-09-30T13:35:00Z",
+                  "value": 1986.5
+                },
+                {
+                  "at": "2026-09-30T13:35:30Z",
+                  "value": 1991.0
+                },
+                {
+                  "at": "2026-09-30T13:36:00Z",
+                  "value": 1999.7
+                },
+                {
+                  "at": "2026-09-30T13:36:30Z",
+                  "value": 1987.3
+                },
+                {
+                  "at": "2026-09-30T13:37:00Z",
+                  "value": 1998.0
+                },
+                {
+                  "at": "2026-09-30T13:37:30Z",
+                  "value": 1998.2
+                },
+                {
+                  "at": "2026-09-30T13:38:00Z",
+                  "value": 1997.8
+                },
+                {
+                  "at": "2026-09-30T13:38:30Z",
+                  "value": 2000.7
+                },
+                {
+                  "at": "2026-09-30T13:39:00Z",
+                  "value": 1987.3
+                },
+                {
+                  "at": "2026-09-30T13:39:30Z",
+                  "value": 1993.4
+                },
+                {
+                  "at": "2026-09-30T13:40:00Z",
+                  "value": 1995.0
+                },
+                {
+                  "at": "2026-09-30T13:40:30Z",
+                  "value": 1992.3
+                },
+                {
+                  "at": "2026-09-30T13:41:00Z",
+                  "value": 1991.8
+                },
+                {
+                  "at": "2026-09-30T13:41:30Z",
+                  "value": 1992.7
+                },
+                {
+                  "at": "2026-09-30T13:42:00Z",
+                  "value": 2001.7
+                },
+                {
+                  "at": "2026-09-30T13:42:30Z",
+                  "value": 1999.1
+                },
+                {
+                  "at": "2026-09-30T13:43:00Z",
+                  "value": 1999.5
+                },
+                {
+                  "at": "2026-09-30T13:43:30Z",
+                  "value": 1999.0
+                },
+                {
+                  "at": "2026-09-30T13:44:00Z",
+                  "value": 2000.9
+                },
+                {
+                  "at": "2026-09-30T13:44:30Z",
+                  "value": 1988.2
+                },
+                {
+                  "at": "2026-09-30T13:45:00Z",
+                  "value": 2000.7
+                },
+                {
+                  "at": "2026-09-30T13:45:30Z",
+                  "value": 1993.4
+                },
+                {
+                  "at": "2026-09-30T13:46:00Z",
+                  "value": 1991.9
+                },
+                {
+                  "at": "2026-09-30T13:46:30Z",
+                  "value": 1998.7
+                },
+                {
+                  "at": "2026-09-30T13:47:00Z",
+                  "value": 1996.8
+                },
+                {
+                  "at": "2026-09-30T13:47:30Z",
+                  "value": 2000.8
+                },
+                {
+                  "at": "2026-09-30T13:48:00Z",
+                  "value": 2001.0
+                },
+                {
+                  "at": "2026-09-30T13:48:30Z",
+                  "value": 1998.3
+                },
+                {
+                  "at": "2026-09-30T13:49:00Z",
+                  "value": 1987.1
+                },
+                {
+                  "at": "2026-09-30T13:49:30Z",
+                  "value": 1997.7
+                },
+                {
+                  "at": "2026-09-30T13:50:00Z",
+                  "value": 1991.8
+                },
+                {
+                  "at": "2026-09-30T13:50:30Z",
+                  "value": 2000.1
+                },
+                {
+                  "at": "2026-09-30T13:51:00Z",
+                  "value": 1991.4
+                },
+                {
+                  "at": "2026-09-30T13:51:30Z",
+                  "value": 1215.3
+                },
+                {
+                  "at": "2026-09-30T13:52:00Z",
+                  "value": 1213.5
+                },
+                {
+                  "at": "2026-09-30T13:52:30Z",
+                  "value": 1227.0
+                },
+                {
+                  "at": "2026-09-30T13:53:00Z",
+                  "value": 1229.5
+                },
+                {
+                  "at": "2026-09-30T13:53:30Z",
+                  "value": 1237.7
+                },
+                {
+                  "at": "2026-09-30T13:54:00Z",
+                  "value": 1205.4
+                },
+                {
+                  "at": "2026-09-30T13:54:30Z",
+                  "value": 1210.6
+                },
+                {
+                  "at": "2026-09-30T13:55:00Z",
+                  "value": 1215.4
+                }
+              ]
+            }
+          }
+        ],
+        "notes": []
+      }
+    }
+  },
+  {
+    "seq": 8,
+    "at": "2026-11-19T18:39:52.165966Z",
+    "event": {
+      "type": "assessed",
+      "trigger": {
+        "trigger": "evidence",
+        "evidence": "E2"
+      },
+      "pack": {
+        "id": "temporal-1.31",
+        "version": "0.1.0",
+        "digest": "8835010b1f8fb689843c6e22938739012391604c19a19a52d58cd11f6388cdf6"
+      },
+      "engine": "kyumei-diagnostics/0.1.0",
+      "states": {
+        "dispatch-rate-ceiling": {
+          "state": "candidate",
+          "contested": false
+        },
+        "history-dispatch-delay": {
+          "state": "candidate",
+          "contested": false
+        },
+        "matching-backlog": {
+          "state": "candidate",
+          "contested": false
+        },
+        "partition-write-read-mismatch": {
+          "state": "candidate",
+          "contested": false
+        },
+        "poll-throttling": {
+          "state": "candidate",
+          "contested": false
+        },
+        "poller-starvation": {
+          "state": "supported",
+          "contested": false
+        },
+        "pollers-absent": {
+          "state": "eliminated",
+          "contested": false
+        },
+        "signal-flood": {
+          "state": "candidate",
+          "contested": false
+        },
+        "worker-slot-exhaustion": {
+          "state": "eliminated",
+          "contested": false
+        }
+      },
+      "transitions": [
+        {
+          "hypothesis": "poller-starvation",
+          "from": "candidate",
+          "to": "supported",
+          "because": [
+            "F-pollers-busy"
+          ]
+        },
+        {
+          "hypothesis": "pollers-absent",
+          "from": "candidate",
+          "to": "eliminated",
+          "because": [
+            "F-pollers-present"
+          ]
+        }
+      ],
+      "findings": [
+        "F-slots-headroom",
+        "F-pollers-busy",
+        "F-pollers-present"
+      ],
+      "next_request": "poll-failures",
+      "conclusion": null
+    }
+  },
+  {
+    "seq": 9,
+    "at": "2026-11-19T18:39:52.165966Z",
+    "event": {
+      "type": "request_answered",
+      "request": "R2"
+    }
+  },
+  {
+    "seq": 10,
+    "at": "2026-11-19T18:39:52.165966Z",
+    "event": {
+      "type": "evidence_requested",
+      "id": "R3",
+      "definition": "poll-failures",
+      "issued_at": "2026-11-19T18:39:52.165966Z",
+      "title": "Failed Workflow Task polls",
+      "why": "A signal flood competes with polls for Frontend rate-limit capacity: Signals are admitted at a higher priority and reserve tokens polls depend on. Rejected polls make Workers back off while slots stay free. Poll failures seen by the Workers show whether that happened.",
+      "collect": [
+        {
+          "method": "promql",
+          "label": "Failed PollWorkflowTaskQueue attempts per second, by status code",
+          "body": "sum by (status_code) (rate(temporal_long_request_failure{operation=\"PollWorkflowTaskQueue\", namespace=\"commerce-prod\", task_queue=\"order-fulfillment\"}[1m]))",
+          "applies_to": null,
+          "unit": "per_second",
+          "claims": [
+            "sdk.long_request_failure",
+            "behaviour.frontend-priorities",
+            "sdk.long-poll-failures-counted-on-failure"
+          ],
+          "unfilled": [],
+          "absent_reads_zero": {
+            "witness": "sum(rate(temporal_long_request{operation=\"PollWorkflowTaskQueue\", namespace=\"commerce-prod\", task_queue=\"order-fulfillment\"}[1m]))",
+            "because": "sdk.long-poll-failures-counted-on-failure"
+          }
+        }
+      ],
+      "window": {
+        "window": {
+          "start": "2026-09-30T13:25:00Z",
+          "end": "2026-09-30T13:55:00Z"
+        },
+        "text": "2026-09-30 13:25–13:55 UTC (the incident window plus 10 min before and 5 min after)"
+      },
+      "group_by": [
+        "status_code"
+      ],
+      "distinguishes": [
+        "poll-throttling"
+      ],
+      "expected_signals": [
+        "poll_failures_rate"
+      ],
+      "responses": [],
+      "status": {
+        "status": "open"
+      }
+    }
+  },
+  {
+    "seq": 11,
+    "at": "2026-11-19T18:39:52.201407Z",
+    "event": {
+      "type": "evidence_submitted",
+      "id": "E3",
+      "submitted_at": "2026-11-19T18:39:52.201407Z",
+      "origin": {
+        "kind": "operator",
+        "channel": "paste"
+      },
+      "responds_to": "R3",
+      "raw": {
+        "media_type": "text/plain; charset=utf-8",
+        "filename": null,
+        "body": {
+          "kind": "text",
+          "text": "{\n \"status\": \"success\",\n \"data\": {\n  \"resultType\": \"matrix\",\n  \"result\": [\n   {\n    \"metric\": {\n     \"status_code\": \"UNAVAILABLE\"\n    },\n    \"values\": [\n     [\n      1790774700,\n      \"0\"\n     ],\n     [\n      1790774730,\n      \"0\"\n     ],\n     [\n      1790774760,\n      \"0\"\n     ],\n     [\n      1790774790,\n      \"0\"\n     ],\n     [\n      1790774820,\n      \"0\"\n     ],\n     [\n      1790774850,\n      \"0\"\n     ],\n     [\n      1790774880,\n      \"0\"\n     ],\n     [\n      1790774910,\n      \"0\"\n     ],\n     [\n      1790774940,\n      \"0\"\n     ],\n     [\n      1790774970,\n      \"0\"\n     ],\n     [\n      1790775000,\n      \"0\"\n     ],\n     [\n      1790775030,\n      \"0\"\n     ],\n     [\n      1790775060,\n      \"0\"\n     ],\n     [\n      1790775090,\n      \"0\"\n     ],\n     [\n      1790775120,\n      \"0\"\n     ],\n     [\n      1790775150,\n      \"0\"\n     ],\n     [\n      1790775180,\n      \"0\"\n     ],\n     [\n      1790775210,\n      \"0\"\n     ],\n     [\n      1790775240,\n      \"0\"\n     ],\n     [\n      1790775270,\n      \"0\"\n     ],\n     [\n      1790775300,\n      \"0\"\n     ],\n     [\n      1790775330,\n      \"0\"\n     ],\n     [\n      1790775360,\n      \"0\"\n     ],\n     [\n      1790775390,\n      \"0\"\n     ],\n     [\n      1790775420,\n      \"0\"\n     ],\n     [\n      1790775450,\n      \"0\"\n     ],\n     [\n      1790775480,\n      \"0\"\n     ],\n     [\n      1790775510,\n      \"0\"\n     ],\n     [\n      1790775540,\n      \"0\"\n     ],\n     [\n      1790775570,\n      \"0\"\n     ],\n     [\n      1790775600,\n      \"0\"\n     ],\n     [\n      1790775630,\n      \"0\"\n     ],\n     [\n      1790775660,\n      \"0\"\n     ],\n     [\n      1790775690,\n      \"0\"\n     ],\n     [\n      1790775720,\n      \"0\"\n     ],\n     [\n      1790775750,\n      \"0\"\n     ],\n     [\n      1790775780,\n      \"0\"\n     ],\n     [\n      1790775810,\n      \"0\"\n     ],\n     [\n      1790775840,\n      \"0\"\n     ],\n     [\n      1790775870,\n      \"0\"\n     ],\n     [\n      1790775900,\n      \"0\"\n     ],\n     [\n      1790775930,\n      \"0\"\n     ],\n     [\n      1790775960,\n      \"0\"\n     ],\n     [\n      1790775990,\n      \"0\"\n     ],\n     [\n      1790776020,\n      \"0\"\n     ],\n     [\n      1790776050,\n      \"0\"\n     ],\n     [\n      1790776080,\n      \"0\"\n     ],\n     [\n      1790776110,\n      \"0\"\n     ],\n     [\n      1790776140,\n      \"0\"\n     ],\n     [\n      1790776170,\n      \"0\"\n     ],\n     [\n      1790776200,\n      \"0\"\n     ],\n     [\n      1790776230,\n      \"0\"\n     ],\n     [\n      1790776260,\n      \"0\"\n     ],\n     [\n      1790776290,\n      \"0\"\n     ],\n     [\n      1790776320,\n      \"0\"\n     ],\n     [\n      1790776350,\n      \"0\"\n     ],\n     [\n      1790776380,\n      \"0\"\n     ],\n     [\n      1790776410,\n      \"0\"\n     ],\n     [\n      1790776440,\n      \"0\"\n     ],\n     [\n      1790776470,\n      \"0\"\n     ],\n     [\n      1790776500,\n      \"0\"\n     ]\n    ]\n   }\n  ]\n }\n}\n"
+        },
+        "sha256": "f77b87ba5c8f6c8f17025ac1623d210e146f34f185ecb5a104633b98bb7c18eb",
+        "size_bytes": 2795
+      },
+      "declared": {
+        "form": null,
+        "window": null,
+        "query": "sum by (status_code) (rate(temporal_long_request_failure{operation=\"PollWorkflowTaskQueue\", namespace=\"commerce-prod\"}[1m]))",
+        "signal": null,
+        "unit": null,
+        "labels": {},
+        "note": null
+      },
+      "interpretation": {
+        "form": "prometheus_query_output",
+        "interpreter": "prometheus-api/1",
+        "observations": [
+          {
+            "id": "E3.O1",
+            "evidence": "E3",
+            "status": "observed_fact",
+            "subject": {
+              "metric": null,
+              "labels": {
+                "status_code": "UNAVAILABLE"
+              },
+              "description": null
+            },
+            "binding": {
+              "signal": "poll_failures_rate",
+              "basis": {
+                "basis": "metric_name",
+                "exposed_name": "temporal_long_request_failure"
+              },
+              "claim": "sdk.long_request_failure"
+            },
+            "window": {
+              "start": "2026-09-30T13:25:00Z",
+              "end": "2026-09-30T13:55:00Z"
+            },
+            "value": {
+              "shape": "series",
+              "unit": "per_second",
+              "points": [
+                {
+                  "at": "2026-09-30T13:25:00Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:25:30Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:26:00Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:26:30Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:27:00Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:27:30Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:28:00Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:28:30Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:29:00Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:29:30Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:30:00Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:30:30Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:31:00Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:31:30Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:32:00Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:32:30Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:33:00Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:33:30Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:34:00Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:34:30Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:35:00Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:35:30Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:36:00Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:36:30Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:37:00Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:37:30Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:38:00Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:38:30Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:39:00Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:39:30Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:40:00Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:40:30Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:41:00Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:41:30Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:42:00Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:42:30Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:43:00Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:43:30Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:44:00Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:44:30Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:45:00Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:45:30Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:46:00Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:46:30Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:47:00Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:47:30Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:48:00Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:48:30Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:49:00Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:49:30Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:50:00Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:50:30Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:51:00Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:51:30Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:52:00Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:52:30Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:53:00Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:53:30Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:54:00Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:54:30Z",
+                  "value": 0.0
+                },
+                {
+                  "at": "2026-09-30T13:55:00Z",
+                  "value": 0.0
+                }
+              ]
+            }
+          }
+        ],
+        "notes": []
+      }
+    }
+  },
+  {
+    "seq": 12,
+    "at": "2026-11-19T18:39:52.201407Z",
+    "event": {
+      "type": "assessed",
+      "trigger": {
+        "trigger": "evidence",
+        "evidence": "E3"
+      },
+      "pack": {
+        "id": "temporal-1.31",
+        "version": "0.1.0",
+        "digest": "8835010b1f8fb689843c6e22938739012391604c19a19a52d58cd11f6388cdf6"
+      },
+      "engine": "kyumei-diagnostics/0.1.0",
+      "states": {
+        "dispatch-rate-ceiling": {
+          "state": "candidate",
+          "contested": false
+        },
+        "history-dispatch-delay": {
+          "state": "candidate",
+          "contested": false
+        },
+        "matching-backlog": {
+          "state": "candidate",
+          "contested": false
+        },
+        "partition-write-read-mismatch": {
+          "state": "candidate",
+          "contested": false
+        },
+        "poll-throttling": {
+          "state": "eliminated",
+          "contested": false
+        },
+        "poller-starvation": {
+          "state": "supported",
+          "contested": false
+        },
+        "pollers-absent": {
+          "state": "eliminated",
+          "contested": false
+        },
+        "signal-flood": {
+          "state": "candidate",
+          "contested": false
+        },
+        "worker-slot-exhaustion": {
+          "state": "eliminated",
+          "contested": false
+        }
+      },
+      "transitions": [
+        {
+          "hypothesis": "poll-throttling",
+          "from": "candidate",
+          "to": "eliminated",
+          "because": [
+            "F-no-poll-failures"
+          ]
+        }
+      ],
+      "findings": [
+        "F-slots-headroom",
+        "F-pollers-busy",
+        "F-pollers-present",
+        "F-no-poll-failures"
+      ],
+      "next_request": "matching-queue-stats",
+      "conclusion": null
+    }
+  },
+  {
+    "seq": 13,
+    "at": "2026-11-19T18:39:52.201407Z",
+    "event": {
+      "type": "request_answered",
+      "request": "R3"
+    }
+  },
+  {
+    "seq": 14,
+    "at": "2026-11-19T18:39:52.201407Z",
+    "event": {
+      "type": "evidence_requested",
+      "id": "R4",
+      "definition": "matching-queue-stats",
+      "issued_at": "2026-11-19T18:39:52.201407Z",
+      "title": "Task Queue backlog, add and dispatch rates",
+      "why": "With Worker capacity free and polls not throttled, the question is where the wait accrues. DescribeTaskQueue reports Matching's backlog, the rates tasks are added and dispatched, and the effective dispatch rate limit, which together locate the constraint in Matching or before it. It also lists the Workers that polled in the last 5 minutes, which settles whether any did.",
+      "collect": [
+        {
+          "method": "temporal-api",
+          "label": "DescribeTaskQueue with statistics, through grpcurl, captured during the incident — point it at a Frontend, which answers gRPC reflection, so grpcurl needs no proto files; -emit-defaults keeps zero rates and an empty poller list, which protobuf JSON leaves out; with TLS, use -cacert, -cert and -key instead of -plaintext; record when you captured it",
+          "body": "grpcurl -plaintext -emit-defaults -d '{\"namespace\": \"commerce-prod\", \"taskQueue\": {\"name\": \"order-fulfillment\"}, \"taskQueueType\": \"TASK_QUEUE_TYPE_WORKFLOW\", \"reportStats\": true}' <frontend-host:7233> temporal.api.workflowservice.v1.WorkflowService/DescribeTaskQueue",
+          "applies_to": null,
+          "unit": null,
+          "claims": [
+            "behaviour.frontend-grpc-reflection",
+            "api.task_queue_stats.approximate_backlog_age",
+            "api.task_queue_stats.tasks_add_rate",
+            "api.task_queue_stats.tasks_dispatch_rate",
+            "api.describe_task_queue.effective_rate_limit",
+            "api.describe_task_queue.pollers"
+          ],
+          "unfilled": []
+        },
+        {
+          "method": "temporal-cli",
+          "label": "If you cannot run grpcurl: the Temporal CLI's description, as JSON, without the rate limit — CLI 1.7.0 to 1.9.1 print the backlog, rates and pollers but not the effective rate limit, and describe only the unversioned queue, or the default Build ID's, so with versioned Workers use grpcurl; record when you captured it",
+          "body": "temporal task-queue describe --namespace commerce-prod --task-queue order-fulfillment --task-queue-type workflow -o json",
+          "applies_to": null,
+          "unit": null,
+          "claims": [
+            "cli.task-queue-describe",
+            "api.task_queue_stats.approximate_backlog_age",
+            "api.task_queue_stats.tasks_add_rate",
+            "api.task_queue_stats.tasks_dispatch_rate",
+            "api.describe_task_queue.pollers"
+          ],
+          "unfilled": []
+        },
+        {
+          "method": "promql",
+          "label": "If you can run neither: Matching's backlog age over the window — matches `commerce-prod` also as `commerce_prod` and `order-fulfillment` also as `order_fulfillment`, the spelling tally writes",
+          "body": "max(approximate_backlog_age_seconds{namespace=~\"commerce-prod|commerce_prod\", taskqueue=~\"order-fulfillment|order_fulfillment\", task_type=\"Workflow\"})",
+          "applies_to": null,
+          "unit": "seconds",
+          "claims": [
+            "server.approximate_backlog_age_seconds",
+            "server.taskqueue-tag",
+            "server.metrics-label-values"
+          ],
+          "unfilled": []
+        }
+      ],
+      "window": {
+        "window": {
+          "start": "2026-09-30T13:35:00Z",
+          "end": "2026-09-30T13:50:00Z"
+        },
+        "text": "2026-09-30 13:35–13:50 UTC (the incident window). Capture it while the latency is elevated, and note the time."
+      },
+      "group_by": [],
+      "distinguishes": [
+        "matching-backlog",
+        "history-dispatch-delay",
+        "dispatch-rate-ceiling",
+        "poller-starvation",
+        "pollers-absent"
+      ],
+      "expected_signals": [
+        "backlog_age",
+        "backlog_count",
+        "tasks_add_rate",
+        "tasks_dispatch_rate",
+        "dispatch_rate_limit",
+        "listed_pollers"
+      ],
+      "responses": [],
+      "status": {
+        "status": "open"
+      }
+    }
+  },
+  {
+    "seq": 15,
+    "at": "2026-11-19T18:39:52.233325Z",
+    "event": {
+      "type": "evidence_submitted",
+      "id": "E4",
+      "submitted_at": "2026-11-19T18:39:52.233325Z",
+      "origin": {
+        "kind": "operator",
+        "channel": "paste"
+      },
+      "responds_to": "R4",
+      "raw": {
+        "media_type": "text/plain; charset=utf-8",
+        "filename": null,
+        "body": {
+          "kind": "text",
+          "text": "{\n  \"pollers\": [\n    {\n      \"lastAccessTime\": \"2026-09-30T13:48:29.812Z\",\n      \"identity\": \"4100@order-worker-7d9f6c5b8-an0x\",\n      \"ratePerSecond\": 100000\n    },\n    {\n      \"lastAccessTime\": \"2026-09-30T13:48:28.775Z\",\n      \"identity\": \"4107@order-worker-7d9f6c5b8-bp1x\",\n      \"ratePerSecond\": 100000\n    },\n    {\n      \"lastAccessTime\": \"2026-09-30T13:48:27.738Z\",\n      \"identity\": \"4114@order-worker-7d9f6c5b8-cr2x\",\n      \"ratePerSecond\": 100000\n    },\n    {\n      \"lastAccessTime\": \"2026-09-30T13:48:29.701Z\",\n      \"identity\": \"4121@order-worker-7d9f6c5b8-ds3x\",\n      \"ratePerSecond\": 100000\n    },\n    {\n      \"lastAccessTime\": \"2026-09-30T13:48:28.664Z\",\n      \"identity\": \"4128@order-worker-7d9f6c5b8-et4x\",\n      \"ratePerSecond\": 100000\n    },\n    {\n      \"lastAccessTime\": \"2026-09-30T13:48:27.627Z\",\n      \"identity\": \"4135@order-worker-7d9f6c5b8-fv5x\",\n      \"ratePerSecond\": 100000\n    },\n    {\n      \"lastAccessTime\": \"2026-09-30T13:48:29.590Z\",\n      \"identity\": \"4142@order-worker-7d9f6c5b8-gw6x\",\n      \"ratePerSecond\": 100000\n    },\n    {\n      \"lastAccessTime\": \"2026-09-30T13:48:28.553Z\",\n      \"identity\": \"4149@order-worker-7d9f6c5b8-hx7x\",\n      \"ratePerSecond\": 100000\n    },\n    {\n      \"lastAccessTime\": \"2026-09-30T13:48:27.516Z\",\n      \"identity\": \"4156@order-worker-7d9f6c5b8-jy8x\",\n      \"ratePerSecond\": 100000\n    },\n    {\n      \"lastAccessTime\": \"2026-09-30T13:48:29.479Z\",\n      \"identity\": \"4163@order-worker-7d9f6c5b8-kz9x\",\n      \"ratePerSecond\": 100000\n    },\n    {\n      \"lastAccessTime\": \"2026-09-30T13:48:28.442Z\",\n      \"identity\": \"4170@order-worker-7d9f6c5b8-lq10x\",\n      \"ratePerSecond\": 100000\n    },\n    {\n      \"lastAccessTime\": \"2026-09-30T13:48:27.405Z\",\n      \"identity\": \"4177@order-worker-7d9f6c5b8-mk11x\",\n      \"ratePerSecond\": 100000\n    }\n  ],\n  \"stats\": {\n    \"approximateBacklogCount\": \"61840\",\n    \"approximateBacklogAge\": \"31.402s\",\n    \"tasksAddRate\": 2112.4,\n    \"tasksDispatchRate\": 1994.8\n  },\n  \"statsByPriorityKey\": {\n    \"3\": {\n      \"approximateBacklogCount\": \"61840\",\n      \"approximateBacklogAge\": \"31.402s\",\n      \"tasksAddRate\": 2112.4,\n      \"tasksDispatchRate\": 1994.8\n    }\n  },\n  \"effectiveRateLimit\": {\n    \"requestsPerSecond\": 2000,\n    \"rateLimitSource\": \"RATE_LIMIT_SOURCE_SYSTEM\"\n  }\n}\n"
+        },
+        "sha256": "6bb963efd18b07e6ba8cf9ab8b6f767fc88503b6127e7dee51ff0f68cb69152d",
+        "size_bytes": 2278
+      },
+      "declared": {
+        "form": null,
+        "window": {
+          "start": "2026-09-30T13:48:30Z",
+          "end": "2026-09-30T13:48:30Z"
+        },
+        "query": null,
+        "signal": null,
+        "unit": null,
+        "labels": {},
+        "note": "Captured at 13:48:30 UTC with DescribeTaskQueue (report_stats) through grpcurl, as JSON"
+      },
+      "interpretation": {
+        "form": "json",
+        "interpreter": "json-fields/1",
+        "observations": [
+          {
+            "id": "E4.O1",
+            "evidence": "E4",
+            "status": "observed_fact",
+            "subject": {
+              "metric": null,
+              "labels": {},
+              "description": "effectiveRateLimit.requestsPerSecond"
+            },
+            "binding": {
+              "signal": "dispatch_rate_limit",
+              "basis": {
+                "basis": "field_name",
+                "field": "effectiveRateLimit.requestsPerSecond"
+              },
+              "claim": "api.describe_task_queue.effective_rate_limit"
+            },
+            "window": {
+              "start": "2026-09-30T13:48:30Z",
+              "end": "2026-09-30T13:48:30Z"
+            },
+            "value": {
+              "shape": "scalar",
+              "unit": "per_second",
+              "value": 2000.0,
+              "statistic": "last"
+            }
+          },
+          {
+            "id": "E4.O2",
+            "evidence": "E4",
+            "status": "observed_fact",
+            "subject": {
+              "metric": null,
+              "labels": {},
+              "description": "pollers"
+            },
+            "binding": {
+              "signal": "listed_pollers",
+              "basis": {
+                "basis": "field_name",
+                "field": "pollers"
+              },
+              "claim": "api.describe_task_queue.pollers"
+            },
+            "window": {
+              "start": "2026-09-30T13:48:30Z",
+              "end": "2026-09-30T13:48:30Z"
+            },
+            "value": {
+              "shape": "scalar",
+              "unit": "count",
+              "value": 12.0,
+              "statistic": "last"
+            }
+          },
+          {
+            "id": "E4.O3",
+            "evidence": "E4",
+            "status": "observed_fact",
+            "subject": {
+              "metric": null,
+              "labels": {},
+              "description": "stats.approximateBacklogAge"
+            },
+            "binding": {
+              "signal": "backlog_age",
+              "basis": {
+                "basis": "field_name",
+                "field": "stats.approximateBacklogAge"
+              },
+              "claim": "api.task_queue_stats.approximate_backlog_age"
+            },
+            "window": {
+              "start": "2026-09-30T13:48:30Z",
+              "end": "2026-09-30T13:48:30Z"
+            },
+            "value": {
+              "shape": "scalar",
+              "unit": "seconds",
+              "value": 31.402,
+              "statistic": "last"
+            }
+          },
+          {
+            "id": "E4.O4",
+            "evidence": "E4",
+            "status": "observed_fact",
+            "subject": {
+              "metric": null,
+              "labels": {},
+              "description": "stats.approximateBacklogCount"
+            },
+            "binding": {
+              "signal": "backlog_count",
+              "basis": {
+                "basis": "field_name",
+                "field": "stats.approximateBacklogCount"
+              },
+              "claim": "api.task_queue_stats.approximate_backlog_count"
+            },
+            "window": {
+              "start": "2026-09-30T13:48:30Z",
+              "end": "2026-09-30T13:48:30Z"
+            },
+            "value": {
+              "shape": "scalar",
+              "unit": "count",
+              "value": 61840.0,
+              "statistic": "last"
+            }
+          },
+          {
+            "id": "E4.O5",
+            "evidence": "E4",
+            "status": "observed_fact",
+            "subject": {
+              "metric": null,
+              "labels": {},
+              "description": "stats.tasksAddRate"
+            },
+            "binding": {
+              "signal": "tasks_add_rate",
+              "basis": {
+                "basis": "field_name",
+                "field": "stats.tasksAddRate"
+              },
+              "claim": "api.task_queue_stats.tasks_add_rate"
+            },
+            "window": {
+              "start": "2026-09-30T13:48:30Z",
+              "end": "2026-09-30T13:48:30Z"
+            },
+            "value": {
+              "shape": "scalar",
+              "unit": "per_second",
+              "value": 2112.4,
+              "statistic": "last"
+            }
+          },
+          {
+            "id": "E4.O6",
+            "evidence": "E4",
+            "status": "observed_fact",
+            "subject": {
+              "metric": null,
+              "labels": {},
+              "description": "stats.tasksDispatchRate"
+            },
+            "binding": {
+              "signal": "tasks_dispatch_rate",
+              "basis": {
+                "basis": "field_name",
+                "field": "stats.tasksDispatchRate"
+              },
+              "claim": "api.task_queue_stats.tasks_dispatch_rate"
+            },
+            "window": {
+              "start": "2026-09-30T13:48:30Z",
+              "end": "2026-09-30T13:48:30Z"
+            },
+            "value": {
+              "shape": "scalar",
+              "unit": "per_second",
+              "value": 1994.8,
+              "statistic": "last"
+            }
+          }
+        ],
+        "notes": []
+      }
+    }
+  },
+  {
+    "seq": 16,
+    "at": "2026-11-19T18:39:52.233325Z",
+    "event": {
+      "type": "assessed",
+      "trigger": {
+        "trigger": "evidence",
+        "evidence": "E4"
+      },
+      "pack": {
+        "id": "temporal-1.31",
+        "version": "0.1.0",
+        "digest": "8835010b1f8fb689843c6e22938739012391604c19a19a52d58cd11f6388cdf6"
+      },
+      "engine": "kyumei-diagnostics/0.1.0",
+      "states": {
+        "dispatch-rate-ceiling": {
+          "state": "established",
+          "contested": false
+        },
+        "history-dispatch-delay": {
+          "state": "eliminated",
+          "contested": false
+        },
+        "matching-backlog": {
+          "state": "established",
+          "contested": false
+        },
+        "partition-write-read-mismatch": {
+          "state": "candidate",
+          "contested": false
+        },
+        "poll-throttling": {
+          "state": "eliminated",
+          "contested": false
+        },
+        "poller-starvation": {
+          "state": "eliminated",
+          "contested": true
+        },
+        "pollers-absent": {
+          "state": "eliminated",
+          "contested": false
+        },
+        "signal-flood": {
+          "state": "candidate",
+          "contested": false
+        },
+        "worker-slot-exhaustion": {
+          "state": "eliminated",
+          "contested": false
+        }
+      },
+      "transitions": [
+        {
+          "hypothesis": "poller-starvation",
+          "from": "supported",
+          "to": "eliminated",
+          "because": [
+            "F-pollers-busy",
+            "F-dispatch-capped-not-pollers"
+          ]
+        },
+        {
+          "hypothesis": "matching-backlog",
+          "from": "candidate",
+          "to": "established",
+          "because": [
+            "F-backlog-carries-latency",
+            "F-adds-exceed-dispatch"
+          ]
+        },
+        {
+          "hypothesis": "history-dispatch-delay",
+          "from": "candidate",
+          "to": "eliminated",
+          "because": [
+            "F-matching-accounts-for-latency"
+          ]
+        },
+        {
+          "hypothesis": "dispatch-rate-ceiling",
+          "from": "candidate",
+          "to": "established",
+          "because": [
+            "F-dispatch-at-limit"
+          ]
+        }
+      ],
+      "findings": [
+        "F-slots-headroom",
+        "F-pollers-busy",
+        "F-dispatch-capped-not-pollers",
+        "F-pollers-present",
+        "F-pollers-listed",
+        "F-no-poll-failures",
+        "F-backlog-carries-latency",
+        "F-adds-exceed-dispatch",
+        "F-matching-accounts-for-latency",
+        "F-dispatch-at-limit"
+      ],
+      "next_request": "partition-config",
+      "conclusion": "dispatch-ceiling"
+    }
+  },
+  {
+    "seq": 17,
+    "at": "2026-11-19T18:39:52.233325Z",
+    "event": {
+      "type": "request_answered",
+      "request": "R4"
+    }
+  },
+  {
+    "seq": 18,
+    "at": "2026-11-19T18:39:52.233325Z",
+    "event": {
+      "type": "evidence_requested",
+      "id": "R5",
+      "definition": "partition-config",
+      "issued_at": "2026-11-19T18:39:52.233325Z",
+      "title": "Task Queue partition configuration",
+      "why": "The effective dispatch limit is the per-partition limit multiplied by the read partitions. The partition settings in effect for order-fulfillment show where the limit comes from, and whether tasks are written to partitions no poller reads.",
+      "collect": [
+        {
+          "method": "dynamic-config",
+          "label": "Every matching.numTaskqueueReadPartitions and matching.numTaskqueueWritePartitions entry in your dynamic config, with constraints — if neither key is set, say so: Kyumei will not assume the default of 4 from an absent entry",
+          "body": "grep -A 6 -E 'matching\\.numTaskqueue(Read|Write)Partitions' <your-dynamic-config.yaml>",
+          "applies_to": null,
+          "unit": null,
+          "claims": [
+            "dc.matching.numTaskqueueReadPartitions",
+            "dc.matching.numTaskqueueWritePartitions"
+          ],
+          "unfilled": []
+        }
+      ],
+      "window": {
+        "window": {
+          "start": "2026-09-30T13:25:00Z",
+          "end": "2026-09-30T13:55:00Z"
+        },
+        "text": "2026-09-30 13:25–13:55 UTC (the incident window plus 10 min before and 5 min after)"
+      },
+      "group_by": [],
+      "distinguishes": [
+        "partition-write-read-mismatch",
+        "dispatch-rate-ceiling"
+      ],
+      "expected_signals": [
+        "read_partitions",
+        "write_partitions"
+      ],
+      "responses": [],
+      "status": {
+        "status": "open"
+      }
+    }
+  },
+  {
+    "seq": 19,
+    "at": "2026-11-19T18:39:52.270655Z",
+    "event": {
+      "type": "evidence_submitted",
+      "id": "E5",
+      "submitted_at": "2026-11-19T18:39:52.270655Z",
+      "origin": {
+        "kind": "operator",
+        "channel": "paste"
+      },
+      "responds_to": "R5",
+      "raw": {
+        "media_type": "text/plain; charset=utf-8",
+        "filename": null,
+        "body": {
+          "kind": "text",
+          "text": "# config/dynamicconfig/production.yaml (excerpt, via grep)\n# order-fulfillment was reduced to 2 partitions in June when its traffic was low.\nmatching.numTaskqueueReadPartitions:\n  - value: 2\n    constraints:\n      namespace: \"commerce-prod\"\n      taskQueueName: \"order-fulfillment\"\nmatching.numTaskqueueWritePartitions:\n  - value: 2\n    constraints:\n      namespace: \"commerce-prod\"\n      taskQueueName: \"order-fulfillment\"\n"
+        },
+        "sha256": "204f1a6e89830bbf72445e210bfbb7d89c5e9b766e59efae62be0e35596e17e3",
+        "size_bytes": 424
+      },
+      "declared": {
+        "form": null,
+        "window": null,
+        "query": null,
+        "signal": null,
+        "unit": null,
+        "labels": {},
+        "note": null
+      },
+      "interpretation": {
+        "form": "configuration",
+        "interpreter": "dynamic-config/1",
+        "observations": [
+          {
+            "id": "E5.O1",
+            "evidence": "E5",
+            "status": "observed_fact",
+            "subject": {
+              "metric": null,
+              "labels": {
+                "key": "matching.numTaskqueueReadPartitions",
+                "namespace": "commerce-prod",
+                "taskQueueName": "order-fulfillment"
+              },
+              "description": "matching.numTaskqueueReadPartitions"
+            },
+            "binding": {
+              "signal": "read_partitions",
+              "basis": {
+                "basis": "field_name",
+                "field": "matching.numTaskqueueReadPartitions"
+              },
+              "claim": "dc.matching.numTaskqueueReadPartitions"
+            },
+            "window": null,
+            "value": {
+              "shape": "categorical",
+              "value": "2"
+            }
+          },
+          {
+            "id": "E5.O2",
+            "evidence": "E5",
+            "status": "observed_fact",
+            "subject": {
+              "metric": null,
+              "labels": {
+                "key": "matching.numTaskqueueWritePartitions",
+                "namespace": "commerce-prod",
+                "taskQueueName": "order-fulfillment"
+              },
+              "description": "matching.numTaskqueueWritePartitions"
+            },
+            "binding": {
+              "signal": "write_partitions",
+              "basis": {
+                "basis": "field_name",
+                "field": "matching.numTaskqueueWritePartitions"
+              },
+              "claim": "dc.matching.numTaskqueueWritePartitions"
+            },
+            "window": null,
+            "value": {
+              "shape": "categorical",
+              "value": "2"
+            }
+          }
+        ],
+        "notes": [
+          {
+            "severity": "info",
+            "text": "Keys absent from this fragment are not assumed to be at their defaults: the fragment may be partial.",
+            "observation": null
+          }
+        ]
+      }
+    }
+  },
+  {
+    "seq": 20,
+    "at": "2026-11-19T18:39:52.270655Z",
+    "event": {
+      "type": "assessed",
+      "trigger": {
+        "trigger": "evidence",
+        "evidence": "E5"
+      },
+      "pack": {
+        "id": "temporal-1.31",
+        "version": "0.1.0",
+        "digest": "8835010b1f8fb689843c6e22938739012391604c19a19a52d58cd11f6388cdf6"
+      },
+      "engine": "kyumei-diagnostics/0.1.0",
+      "states": {
+        "dispatch-rate-ceiling": {
+          "state": "established",
+          "contested": false
+        },
+        "history-dispatch-delay": {
+          "state": "eliminated",
+          "contested": false
+        },
+        "matching-backlog": {
+          "state": "established",
+          "contested": false
+        },
+        "partition-write-read-mismatch": {
+          "state": "eliminated",
+          "contested": false
+        },
+        "poll-throttling": {
+          "state": "eliminated",
+          "contested": false
+        },
+        "poller-starvation": {
+          "state": "eliminated",
+          "contested": true
+        },
+        "pollers-absent": {
+          "state": "eliminated",
+          "contested": false
+        },
+        "signal-flood": {
+          "state": "candidate",
+          "contested": false
+        },
+        "worker-slot-exhaustion": {
+          "state": "eliminated",
+          "contested": false
+        }
+      },
+      "transitions": [
+        {
+          "hypothesis": "partition-write-read-mismatch",
+          "from": "candidate",
+          "to": "eliminated",
+          "because": [
+            "F-write-within-read"
+          ]
+        }
+      ],
+      "findings": [
+        "F-slots-headroom",
+        "F-pollers-busy",
+        "F-dispatch-capped-not-pollers",
+        "F-pollers-present",
+        "F-pollers-listed",
+        "F-no-poll-failures",
+        "F-backlog-carries-latency",
+        "F-adds-exceed-dispatch",
+        "F-matching-accounts-for-latency",
+        "F-dispatch-at-limit",
+        "F-limit-from-partitions",
+        "F-write-within-read"
+      ],
+      "next_request": "signal-rate",
+      "conclusion": "dispatch-ceiling"
+    }
+  },
+  {
+    "seq": 21,
+    "at": "2026-11-19T18:39:52.270655Z",
+    "event": {
+      "type": "request_answered",
+      "request": "R5"
+    }
+  },
+  {
+    "seq": 22,
+    "at": "2026-11-19T18:39:52.270655Z",
+    "event": {
+      "type": "evidence_requested",
+      "id": "R6",
+      "definition": "signal-rate",
+      "issued_at": "2026-11-19T18:39:52.270655Z",
+      "title": "SignalWorkflowExecution rate before and during the incident",
+      "why": "Each Signal to an idle Workflow Execution schedules one Workflow Task. Comparing the Signal rate before and during the incident with the Workflow Task add rate shows whether the Signal flood drove it.",
+      "collect": [
+        {
+          "method": "promql",
+          "label": "Signals received by the Frontend per second (include at least 10 minutes before the incident) — with the OpenTelemetry metrics framework the counter is named service_requests_total — matches `commerce-prod` also as `commerce_prod`, the spelling tally writes",
+          "body": "sum(rate(service_requests{service_name=\"frontend\", operation=\"SignalWorkflowExecution\", namespace=~\"commerce-prod|commerce_prod\"}[1m]))",
+          "applies_to": null,
+          "unit": "per_second",
+          "claims": [
+            "server.service_requests",
+            "server.metrics-framework",
+            "server.metrics-label-values"
+          ],
+          "unfilled": []
+        }
+      ],
+      "window": {
+        "window": {
+          "start": "2026-09-30T13:15:00Z",
+          "end": "2026-09-30T13:55:00Z"
+        },
+        "text": "2026-09-30 13:15–13:55 UTC (the incident window plus 20 min before and 5 min after)"
+      },
+      "group_by": [],
+      "distinguishes": [
+        "signal-flood"
+      ],
+      "expected_signals": [
+        "signal_request_rate"
+      ],
+      "responses": [],
+      "status": {
+        "status": "open"
+      }
+    }
+  },
+  {
+    "seq": 23,
+    "at": "2026-11-19T18:39:56.099698Z",
+    "event": {
+      "type": "evidence_submitted",
+      "id": "E6",
+      "submitted_at": "2026-11-19T18:39:56.099698Z",
+      "origin": {
+        "kind": "simulation",
+        "simulator": "tempdes",
+        "commit": "22b8dc97f181c88f70ba723842b293668645f2a8",
+        "seed": 1
+      },
+      "responds_to": null,
+      "raw": {
+        "media_type": "application/yaml",
+        "filename": "dispatch-ceiling-size.yaml",
+        "body": {
+          "kind": "text",
+          "text": "name: task-queue-dispatch\nseed: 1\nwarmup: 10s\nduration: 900s\ncluster:\n  num_history_shards: 64\n  replicas: { frontend: 1, history: 1, matching: 1, worker: 1 }\n  resources:\n    frontend: { cpu: 2 }\n    history: { cpu: 2 }\n    matching: { cpu: 2 }\n    worker: { cpu: 1 }\n  network: { client_rtt: 2ms, internal_rtt: 0.5ms }\n  persistence:\n    store: postgresql\n    max_conns: { frontend: 20, history: 50, matching: 30, worker: 10 }\n    capacity: 80\n    latency:\n      UpdateWorkflowExecution: { p50: 3ms, p99: 14ms }\n      CreateWorkflowExecution: { p50: 4ms, p99: 18ms }\n  visibility: { store: elasticsearch }\ndynamic_config:\n  matching.numTaskqueueReadPartitions:\n    - value: 2\n      constraints:\n        namespace: \"kyumei\"\n        taskQueueName: \"kyumei\"\n  matching.numTaskqueueWritePartitions:\n    - value: 2\n      constraints:\n        namespace: \"kyumei\"\n        taskQueueName: \"kyumei\"\n  admin.matchingNamespaceTaskqueueToPartitionDispatchRate:\n    - value: 50\n      constraints:\n        namespace: \"kyumei\"\n        taskQueueName: \"kyumei\"\nnamespaces:\n  - name: kyumei\nworkers:\n  - name: workers\n    namespace: kyumei\n    task_queue: kyumei\n    processes: 4\n    workflow_pollers: 16\n    activity_pollers: 1\n    workflow_slots: 1000\n    activity_slots: 10\n    sticky_cache_size: 0\nworkflows:\n  - type: Probe\n    namespace: kyumei\n    task_queue: kyumei\n    start_rate: 105.62/s\n    starters: 4\n    wft_processing: { p50: 2ms, p99: 12ms }\n"
+        },
+        "sha256": "3879193823b7062fc00972531d5aa71779e3eca933a6de93a762aa984c00df4f",
+        "size_bytes": 1442
+      },
+      "declared": {
+        "form": "simulation",
+        "window": {
+          "start": "2026-09-30T13:35:00Z",
+          "end": "2026-09-30T13:50:00Z"
+        },
+        "query": null,
+        "signal": null,
+        "unit": null,
+        "labels": {},
+        "note": null
+      },
+      "interpretation": {
+        "form": "simulation",
+        "interpreter": "simulation/1",
+        "observations": [
+          {
+            "id": "E6.O1",
+            "evidence": "E6",
+            "status": "simulated",
+            "subject": {
+              "metric": null,
+              "labels": {},
+              "description": "Schedule-to-start with the dispatch limit alone"
+            },
+            "binding": {
+              "signal": "ceiling_simulated_sts",
+              "basis": {
+                "basis": "simulation",
+                "simulation": "dispatch-ceiling-size"
+              },
+              "claim": null
+            },
+            "window": {
+              "start": "2026-09-30T13:35:00Z",
+              "end": "2026-09-30T13:50:00Z"
+            },
+            "value": {
+              "shape": "scalar",
+              "unit": "seconds",
+              "value": 40.63305519511111,
+              "statistic": "max"
+            }
+          }
+        ],
+        "notes": [
+          {
+            "severity": "info",
+            "text": "Simulated by tempdes 22b8dc9 with seed 1: one Task Queue whose only constraint is its dispatch limit, for the 15-minute incident window. Calibrated on E4, E5: 2,112 Workflow Tasks a second added against a limit of 2,000 a second, over 2 read partitions.",
+            "observation": null
+          },
+          {
+            "severity": "info",
+            "text": "Both rates were divided by 20 to keep the run small. Their ratio, which sets the wait, is unchanged.",
+            "observation": null
+          },
+          {
+            "severity": "info",
+            "text": "Schedule-to-start reached 40.6 s in the simulation, 1.35× the 30 s observed.",
+            "observation": null
+          },
+          {
+            "severity": "caution",
+            "text": "tempdes models Temporal 1.31.0 on EKS, with Workers that follow the Go SDK. A run that reproduces the latency is consistent with the cause, not proof of it, so it can support or weaken the hypothesis but never settle it.",
+            "observation": "E6.O1"
+          }
+        ]
+      },
+      "simulation": {
+        "simulation": "dispatch-ceiling-size",
+        "hypothesis": "dispatch-rate-ceiling",
+        "inputs": {
+          "add_rate": 2112.4,
+          "dispatch_limit": 2000.0,
+          "read_partitions": 2.0,
+          "symptom": 30.0
+        },
+        "calibrated_on": [
+          "E4",
+          "E5"
+        ],
+        "window": {
+          "start": "2026-09-30T13:35:00Z",
+          "end": "2026-09-30T13:50:00Z"
+        },
+        "scale": 20.0,
+        "results": {
+          "add_rate": 109.17777777777776,
+          "backlog_age_max": 44.07385,
+          "dispatch_rate": 99.99999999999999,
+          "schedule_to_start_max": 40.63305519511111
+        }
+      }
+    }
+  },
+  {
+    "seq": 24,
+    "at": "2026-11-19T18:39:56.099698Z",
+    "event": {
+      "type": "assessed",
+      "trigger": {
+        "trigger": "evidence",
+        "evidence": "E6"
+      },
+      "pack": {
+        "id": "temporal-1.31",
+        "version": "0.1.0",
+        "digest": "8835010b1f8fb689843c6e22938739012391604c19a19a52d58cd11f6388cdf6"
+      },
+      "engine": "kyumei-diagnostics/0.1.0",
+      "states": {
+        "dispatch-rate-ceiling": {
+          "state": "established",
+          "contested": false
+        },
+        "history-dispatch-delay": {
+          "state": "eliminated",
+          "contested": false
+        },
+        "matching-backlog": {
+          "state": "established",
+          "contested": false
+        },
+        "partition-write-read-mismatch": {
+          "state": "eliminated",
+          "contested": false
+        },
+        "poll-throttling": {
+          "state": "eliminated",
+          "contested": false
+        },
+        "poller-starvation": {
+          "state": "eliminated",
+          "contested": true
+        },
+        "pollers-absent": {
+          "state": "eliminated",
+          "contested": false
+        },
+        "signal-flood": {
+          "state": "candidate",
+          "contested": false
+        },
+        "worker-slot-exhaustion": {
+          "state": "eliminated",
+          "contested": false
+        }
+      },
+      "transitions": [],
+      "findings": [
+        "F-slots-headroom",
+        "F-pollers-busy",
+        "F-dispatch-capped-not-pollers",
+        "F-pollers-present",
+        "F-pollers-listed",
+        "F-no-poll-failures",
+        "F-backlog-carries-latency",
+        "F-adds-exceed-dispatch",
+        "F-matching-accounts-for-latency",
+        "F-dispatch-at-limit",
+        "F-limit-from-partitions",
+        "F-ceiling-big-enough",
+        "F-write-within-read"
+      ],
+      "next_request": "signal-rate",
+      "conclusion": "dispatch-ceiling"
+    }
+  }
+]

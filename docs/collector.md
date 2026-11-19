@@ -1,31 +1,31 @@
 # Collecting metrics
 
-Most of Kyumei's evidence requests are PromQL range queries. There are three
+Most of Durable Inquiry's evidence requests are PromQL range queries. There are three
 ways to answer one:
 
 - **Paste the output.** Run the query yourself and paste what Prometheus or
   Grafana returns. See the [operator guide](operator-guide.md).
-- **Collect now.** If Kyumei was started with a Prometheus or Grafana
+- **Collect now.** If Durable Inquiry was started with a Prometheus or Grafana
   endpoint, it runs the request's queries itself and adds the result as
   evidence.
-- **`kyumei-collect`.** Where Kyumei cannot reach your metrics, run the
+- **`durable-inquiry-collect`.** Where Durable Inquiry cannot reach your metrics, run the
   companion where they can be read. It prints a short block of text, a
   *sample block*, to copy from the terminal and paste into the request.
 
-Collect now and `kyumei-collect` produce the same sample block from the same
-client code, and Kyumei reads it the same way. In both cases the samples are
+Collect now and `durable-inquiry-collect` produce the same sample block from the same
+client code, and Durable Inquiry reads it the same way. In both cases the samples are
 observed telemetry, kept exactly as Prometheus returned them.
 
 ## Collect now
 
-Start Kyumei with an endpoint:
+Start Durable Inquiry with an endpoint:
 
 ```bash
-kyumei serve --prometheus-url http://prometheus:9090
+durable-inquiry serve --prometheus-url http://prometheus:9090
 ```
 
 ```bash
-kyumei serve --grafana-url https://grafana.example.com --grafana-datasource P1809F7CD0C75ACF3
+durable-inquiry serve --grafana-url https://grafana.example.com --grafana-datasource P1809F7CD0C75ACF3
 ```
 
 | Option | Effect |
@@ -33,36 +33,36 @@ kyumei serve --grafana-url https://grafana.example.com --grafana-datasource P180
 | `--prometheus-url URL` | The Prometheus HTTP API, or Thanos, Mimir or VictoriaMetrics serving it. A path prefix such as `/prometheus` is kept. |
 | `--grafana-url URL` with `--grafana-datasource UID` | A Prometheus data source, read through Grafana's data source proxy (`/api/datasources/proxy/uid/UID`). |
 | `--metrics-tenant TENANT` | Sent as `X-Scope-OrgID`, for Mimir, Cortex and Thanos tenants. |
-| `--metrics-token-file FILE` | A bearer token, such as a Grafana service account token. Without it, `$KYUMEI_COLLECT_TOKEN` is used. |
-| `--metrics-user USER` | Basic authentication. The password comes from `--metrics-password-file` or `$KYUMEI_COLLECT_PASSWORD`. |
+| `--metrics-token-file FILE` | A bearer token, such as a Grafana service account token. Without it, `$DURABLE_INQUIRY_COLLECT_TOKEN` is used. |
+| `--metrics-user USER` | Basic authentication. The password comes from `--metrics-password-file` or `$DURABLE_INQUIRY_COLLECT_PASSWORD`. |
 | `--metrics-ca-file FILE` | Extra CA certificates to trust, as PEM. |
 
 A request with PromQL queries then shows **Collect now** under its queries.
-Kyumei reads each query over the request's window, at a 15-second step for
+Durable Inquiry reads each query over the request's window, at a 15-second step for
 windows up to an hour, a minute up to six hours, and five minutes beyond.
 It adds the samples as one piece of evidence answering the request.
 
-If a query needs a value Kyumei does not know, such as the namespace,
-Collect now says so instead. Add the value under **Edit context**: Kyumei
+If a query needs a value Durable Inquiry does not know, such as the namespace,
+Collect now says so instead. Add the value under **Edit context**: Durable Inquiry
 issues the request again with the value filled in. If the endpoint cannot be
 reached, refuses the credentials or rejects a query, the request says why,
 and nothing is added.
 
-Evidence from Collect now names its origin as `Collector kyumei 0.1.0`. The
+Evidence from Collect now names its origin as `Collector durable-inquiry 0.1.0`. The
 raw evidence is the sample block, so it can be decoded, exported and replayed
 like any other.
 
-## kyumei-collect
+## durable-inquiry-collect
 
-`kyumei-collect` is a single binary. It has no model, agents or knowledge
+`durable-inquiry-collect` is a single binary. It has no model, agents or knowledge
 pack, and it only reads: it sends `GET /api/v1/query_range` and nothing else.
 Build it and copy it to a machine that can reach your metrics:
 
 ```bash
-cargo build --release -p kyumei-collect
+cargo build --release -p durable-inquiry-collect
 ```
 
-The binary is `target/release/kyumei-collect`.
+The binary is `target/release/durable-inquiry-collect`.
 
 ### Answering a request
 
@@ -70,14 +70,14 @@ Each request with PromQL queries shows the command to run, with a request
 code:
 
 ```bash
-kyumei-collect --code kyq1.7ZBBa4Mw… --set task_queue=order-fulfillment --url http://prometheus:9090
+durable-inquiry-collect --code kyq1.7ZBBa4Mw… --set task_queue=order-fulfillment --url http://prometheus:9090
 ```
 
 The code carries the request's queries and window. A query that needs a value
-Kyumei does not know has a placeholder, such as `<task_queue>`, and the
+Durable Inquiry does not know has a placeholder, such as `<task_queue>`, and the
 command ends with a `--set` for each. Put the value after the `=`. A value
 with characters other than letters, digits and `_` is matched both as written
-and as tally writes it (`order-fulfillment|order_fulfillment`), as Kyumei's
+and as tally writes it (`order-fulfillment|order_fulfillment`), as Durable Inquiry's
 own queries are.
 
 The block goes to standard output; a summary goes to standard error. This
@@ -86,7 +86,7 @@ encoded from saved query output (so its source is `file`):
 
 ```text
 -----BEGIN KYUMEI SAMPLES v1-----
-Collected by kyumei-collect 0.1.0 from file at 2026-10-16 10:45 UTC
+Collected by durable-inquiry-collect 0.1.0 from file at 2026-10-16 10:45 UTC
 Request R3 of inv-golden-visibility-blocks, 2026-10-16 09:50 UTC to 2026-10-16 10:46 UTC, step 1m
 Query 1: sum by (operation) (rate(visibility_persistence_errors[1m]))
   operation=RecordWorkflowExecutionStarted  ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄  min 0  max 0  mean 0  (57 samples)
@@ -94,17 +94,17 @@ Query 1: sum by (operation) (rate(visibility_persistence_errors[1m]))
   operation=RecordWorkflowExecutionClosed   ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄  min 0  max 0  mean 0  (57 samples)
 Query 2: sum(rate(dlq_writes{task_category="visibility"}[1m]))
   (no labels)  ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄  min 0  max 0  mean 0  (57 samples)
-:zZKxSsNgEMeTVhB3wUUldEqGlBZxEHQSJ7cWEREJyZdre-RLrt59aQ0idHHzQerkK9Shb-Di5jP4
-:BEYCVhDXtjcdd_fn_vz5nV91bWs7KfIU0FekNSjjtJrtZmujhxpmL4_z6WAXs5HfJx1D5o9QMEKN
-:pvAjTSqRWudgMv98nQ4m70_l7cdb3aodS546UeG4NAQODVLmOW7ZgLuQB-VKUAxkCgJgJpbrdnrj
-:eXV760e23wFFHF8SJz1N47M7UPn3vGtCNhAfVZ9nz5vWsuuXyZ2LoQCbPybXw93ePxGeapKVJnhY
-:QlJBEevbYMxoQO5NKEmgymGfuDhpLHBpPFR02NYKLX8B
------END KYUMEI SAMPLES (348 chars, crc32 be23ea90)-----
+:zZIxSgNREIZ3E0E8gY2RJdVusSFBLAStxMouQURElt23k2TYlzfJvLeJiwhp7DxIrLxCLHIDGzvP
+:4Al8smAESZtkqmFmfubn57u86bhOLc05TiSEqEY5chEKkhKE8ZqNVqO500UJ89enxax_gGoc9kim
+:oMIxakxQoinCRJLIdKV9NF18vc36049ne_v5XnUqpzofeEnh-TQEjg2SCjzfNuAv5ZFdadQGlIAI
+:mIn1bWtwFwRVd-9XdtgGQZxeE2ddSZOLexD5z7xjYjaQnpSf5y-7zrrrj8n9q6EGNv9Mboe72ooI
+:zyXpjSZ4bCEpoUjlKJowGtAPJtZZJOywR1yc1Ze41B9LOlxng5a_AQ
+-----END KYUMEI SAMPLES (358 chars, crc32 691411b8)-----
 ```
 
 Copy everything from the `-----BEGIN` line to the `-----END` line and paste it
 into the request's **Paste** form. The lines before the `:` lines are for you
-to read: each series with a sparkline, its minimum, maximum and mean. Kyumei
+to read: each series with a sparkline, its minimum, maximum and mean. Durable Inquiry
 reads only the `:` lines.
 
 `--dry-run` prints the filled-in queries and the window, and reads nothing.
@@ -114,7 +114,7 @@ reads only the `:` lines.
 Give the queries and a window yourself:
 
 ```bash
-kyumei-collect --url http://prometheus:9090 \
+durable-inquiry-collect --url http://prometheus:9090 \
   --query 'sum by (operation) (rate(persistence_requests{service_name="history", operation=~"CreateWorkflowExecution|UpdateWorkflowExecution|AddHistoryTasks"}[1m]))' \
   --last 10m --step 15s
 ```
@@ -124,24 +124,24 @@ load, that printed:
 
 ```text
 -----BEGIN KYUMEI SAMPLES v1-----
-Collected by kyumei-collect 0.1.0 from prometheus at 2026-10-14 11:13 UTC
+Collected by durable-inquiry-collect 0.1.0 from prometheus at 2026-10-14 11:13 UTC
 2026-10-14 11:03 UTC to 2026-10-14 11:13 UTC, step 15s
 Query 1: sum by (operation) (rate(persistence_requests{service_name="history", operation=~"CreateW…
   operation=CreateWorkflowExecution  ▁▁▃▅▇█▆▄▄▄▆████████████▇  min 0  max 0.491  mean 0.37  (24 samples)
   operation=UpdateWorkflowExecution  ▁▃▆▅▃▁▁▃▆██████████▇  min 0.118  max 0.491  mean 0.371  (20 samples)
-:dVBdSFNhGP7OBL_qImGIG3VzGkE7q3QGQTcjLISoG6MyS8LW9snGdnbW-c6xRiWWgTIqicbK2qgd
-:sfWnRmRUzikOFUWHIILiDzIUf2AX6lBRQT_RTUV9b57nfV7e5-V5r9y6RoFUi0Nkkfm0gbNakUGg
-:temZ6dpDdp5jkWBCIl4Zn_H5TQDMNn0hODuy3r0TAVVJYZGl7zloNWdHvF4wczaGVhOC1KTHZiwg
-:mwEV8Oi-iLCAH2HEF5mJYNOzSKcykTnHO1Sn6MS2rlh1kUdk_ybHWwqt3IPsh8ggrk8e37Ab99Sz
-:jMZLG0bX9diCVU_yM9k7DCOjDiZcFft4KqWedpLk5zQF9izqGAAtVaWeuZLAuchr51Is-Ezb5f4d
-:Hev1MkNNy21Vq540b7DM-9EXPlnTvVoz-PcrMydFvZP-enks0uhcrHbJXSGP_0fkmzo4MTxQ-72E
-:WfoUGK4IR5MWpXb3q8n_yWAhTsAuySfN1zrdlLQBM5vq9mD7PCX1V0X3VjACdTsjyt6-0WXIcprP
-:w6mCDsXy5RRYrglmvDiihGWVV_OeIwrG6m73P315FGYrzsD3nzEcHaw_cdddDDvth8v_5aTAUNEf
-:8UODEl5oDQeq8w4AqMmS5Mc15EqCxUlyaV9avisOMDdUeNaam7QG
------END KYUMEI SAMPLES (660 chars, crc32 448d854f)-----
+:dVBtSFNRGD53gqf6kTDCjSK4jaDdlTqDoD8jLISoP0ZlloTN7cgu3u3Oc-61RiWWgTIqicbK2qhd
+:sfWlRmT0sWY0SoocQQSJH8hQ_ID9UIeKCnpENxX1_fM87_PyPi_Pe_L8aQbstsrYXCqgLN5RIfPY
+:lWURBQFZJNaYnZtt3ObEoh1JNiSTucGxQNAGwHj7c4rjfYvdQxkwDQyR7Wypi9WLToTNEi86OFZP
+:CdLTnvBEQg4LKsGoQkZEIlcJwpU8FRxmOzLpbHQuYpfuAJvaNlXpjmFE98-JuLxMEC_nX0EWeXFy
+:7azTuqGeZ7UeXzI6YyblRHe9ONd-keNUzNaUq2YTT63yp4MmeTPKgA2L2QPAt8Ya30R16HDsnnsm
+:Eb5p_O19Fx_46-d62md_NM77Mv3hWv-TQHR_c-d8c_eHF9yEEvcPB9vUidgX93STR-2J-IKvYy_1
+:4aHerpZX1dzM01BvfTSeNq10eO8Of0oHU0kC1kkBZbLF7WWUJRhbVlcH2-QpO97Wd64Eo9C6NqLq
+:wX1Tjqrg6xE4UvJTM3siA9YZwjm3d2phbcOpoluIgYnWC_9v3NkF8zUH4aNnBPZ3t-275K2Cv5zb
+:6z4WZMBI5Xv58WctPPo9Gmoq2gKgIU9R7zXQKymWJOk1_zKLPUmAhZGyQ0Jh2gI
+-----END KYUMEI SAMPLES (671 chars, crc32 9fe692da)-----
 ```
 
-A block without a request code says no request; Kyumei reads it the same way.
+A block without a request code says no request; Durable Inquiry reads it the same way.
 
 `--query` is repeatable; `--metric NAME` reads a metric as it is. The window
 is `--from` and `--to` (RFC 3339), or `--last` ending now; without either it
@@ -153,11 +153,11 @@ need more asks for a longer step.
 
 | Option | Environment | Effect |
 | --- | --- | --- |
-| `--url URL` | `KYUMEI_COLLECT_URL` | The Prometheus HTTP API, or Thanos, Mimir or VictoriaMetrics. |
-| `--grafana URL --datasource UID` | `KYUMEI_COLLECT_GRAFANA`, `KYUMEI_COLLECT_DATASOURCE` | A Prometheus data source, through Grafana's data source proxy. |
-| `--tenant TENANT` | `KYUMEI_COLLECT_TENANT` | Sent as `X-Scope-OrgID`. |
-| `--token-file FILE` | `KYUMEI_COLLECT_TOKEN` | A bearer token. |
-| `--user USER`, `--password-file FILE` | `KYUMEI_COLLECT_USER`, `KYUMEI_COLLECT_PASSWORD` | Basic authentication. |
+| `--url URL` | `DURABLE_INQUIRY_COLLECT_URL` | The Prometheus HTTP API, or Thanos, Mimir or VictoriaMetrics. |
+| `--grafana URL --datasource UID` | `DURABLE_INQUIRY_COLLECT_GRAFANA`, `DURABLE_INQUIRY_COLLECT_DATASOURCE` | A Prometheus data source, through Grafana's data source proxy. |
+| `--tenant TENANT` | `DURABLE_INQUIRY_COLLECT_TENANT` | Sent as `X-Scope-OrgID`. |
+| `--token-file FILE` | `DURABLE_INQUIRY_COLLECT_TOKEN` | A bearer token. |
+| `--user USER`, `--password-file FILE` | `DURABLE_INQUIRY_COLLECT_USER`, `DURABLE_INQUIRY_COLLECT_PASSWORD` | Basic authentication. |
 | `--ca-file FILE` | | Extra CA certificates to trust, as PEM. |
 
 Secrets are read from files or the environment, never from the command line,
@@ -169,17 +169,17 @@ which carries the query.
 
 Values are exact by default. `--round N` rounds them to N significant digits
 (1 to 17), which shortens blocks of noisy measurements. The block records
-that it was rounded, and Kyumei says so on the evidence.
+that it was rounded, and Durable Inquiry says so on the evidence.
 
 The record lag of the visibility reference fixture (three series, 843 samples, a
 41,676-byte JSON response):
 
 | Rounding | Characters | Lines |
 | --- | --- | --- |
-| Exact | 3,283 | 44 |
-| 4 digits | 2,635 | 35 |
-| 3 digits | 2,142 | 29 |
-| 2 digits | 1,422 | 19 |
+| Exact | 3,296 | 44 |
+| 4 digits | 2,647 | 35 |
+| 3 digits | 2,156 | 29 |
+| 2 digits | 1,432 | 19 |
 
 Counts, gauges that change little, and flat series compress much further: the
 same fixture's refusals (519 samples, 22,710 bytes of JSON) take 5 lines.
@@ -191,24 +191,24 @@ pseudonyms such as `r_3f9c07a1d2`, in the samples and in the queries. A
 pseudonym is an HMAC-SHA256 of the label and its value under a random key
 kept on the collecting machine: the same value of the same label always gets
 the same pseudonym there, and only that machine's table maps it back. The key
-and the table are in `~/.config/kyumei-collect` (or `--state-dir`), readable
+and the table are in `~/.config/durable-inquiry-collect` (or `--state-dir`), readable
 only by you.
 
 ```bash
-kyumei-collect reveal r_3f9c07a1d2
+durable-inquiry-collect reveal r_3f9c07a1d2
 ```
 
-Kyumei notes on the evidence which labels are pseudonyms. A finding that
+Durable Inquiry notes on the evidence which labels are pseudonyms. A finding that
 quotes a redacted label quotes the pseudonym.
 
 ### Other subcommands
 
-- `kyumei-collect encode FILE… --code CODE` writes saved `query_range` output,
+- `durable-inquiry-collect encode FILE… --code CODE` writes saved `query_range` output,
   one JSON file per query in the code's order, as a block. Use it when you
   can run queries in Grafana's query inspector or with `curl` but cannot run
   the collector against the endpoint. The block's window is the range the
   files cover, unless `--from` or `--last` gives one.
-- `kyumei-collect decode [FILE]` prints every sample of a block (or of
+- `durable-inquiry-collect decode [FILE]` prints every sample of a block (or of
   standard input), to check what it holds.
 - `--qr` also prints the block as a QR code, without its readable lines, when
   it fits in one (at most 2,953 bytes).
@@ -222,7 +222,7 @@ deflate stream of this JSON object:
 | --- | --- |
 | `i` | The investigation's id. |
 | `r` | The request's id, such as `R3`. |
-| `q` | The PromQL queries, in order. `<name>` is a placeholder for a value Kyumei does not know: letters, digits and `_` between angle brackets. |
+| `q` | The PromQL queries, in order. `<name>` is a placeholder for a value Durable Inquiry does not know: letters, digits and `_` between angle brackets. |
 | `s`, `e` | The window's start and end, in Unix milliseconds. |
 | `p` | The step, in milliseconds. |
 
@@ -269,7 +269,7 @@ arithmetic on deltas wraps.
 | Magic | the bytes `KYS` |
 | Version | `u8`, 1 |
 | Rounded to | `u8`: significant digits, or 0 for exact values |
-| Collector | string, such as `kyumei-collect 0.1.0` |
+| Collector | string, such as `durable-inquiry-collect 0.1.0` |
 | Source | string: `prometheus`, `grafana` or `file` |
 | Collected at | `ivarint`, Unix milliseconds |
 | Investigation | string, empty for none |
@@ -304,9 +304,24 @@ for bit, timestamps to the millisecond.
 
 The payload must end after the last query; trailing bytes are rejected.
 
-## What Kyumei does with a block
+### Names in the format
 
-Kyumei recognises a block in a paste or an upload by its first line, and reads
+The format was defined when Durable Inquiry was called Kyumei, and version 1
+keeps the names it was given then: `KYUMEI SAMPLES` on a block's first and
+last lines, the payload's magic `KYS`, and the request code's prefix `kyq1.`.
+They are the format's fixed markers, not labels. A collector often runs on
+another machine, where its output can only be copied as text, and is seldom
+upgraded with the application. Changing a marker would make each refuse what
+the other writes, and blocks already collected would stop reading.
+
+So `kyumei-collect` and `durable-inquiry-collect` read the same codes and
+write the same blocks, and Kyumei and Durable Inquiry read blocks from either.
+The collector's own name, in the *Collector* field and on the `Collected by`
+line, is the only difference, and no reader checks it.
+
+## What Durable Inquiry does with a block
+
+Durable Inquiry recognises a block in a paste or an upload by its first line, and reads
 each query of each block as if its output had been pasted with that query:
 the query tells it which metric a series is, and the window is the block's.
 
@@ -325,13 +340,13 @@ blocks hold that fixture's query output exactly, under each request's code.
 
 ## Checking against a real Prometheus
 
-`crates/kyumei-collect/tests/real_prometheus.rs` reads a set of queries from
+`crates/durable-inquiry-collect/tests/real_prometheus.rs` reads a set of queries from
 a Prometheus you name, compares every sample with Prometheus's own JSON, and
 checks that a block returns them bit for bit:
 
 ```bash
-KYUMEI_PROMETHEUS_URL=http://127.0.0.1:9090 \
-  cargo test -p kyumei-collect --test real_prometheus -- --ignored --nocapture
+DURABLE_INQUIRY_PROMETHEUS_URL=http://127.0.0.1:9090 \
+  cargo test -p durable-inquiry-collect --test real_prometheus -- --ignored --nocapture
 ```
 
 Its queries read Prometheus's own metrics, chosen to return NaN, the

@@ -1,6 +1,6 @@
 [package]
-name = "kyumei-demo"
-description = "Synthetic incidents for a Kyumei demo, on Temporal's Rust SDK."
+name = "durable-inquiry-demo"
+description = "Synthetic incidents for a Durable Inquiry demo, on Temporal's Rust SDK."
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
@@ -16,7 +16,7 @@ futures.workspace = true
 gethostname = "1"
 reqwest.workspace = true
 serde_json.workspace = true
-# Compiles Temporal's protos with protox, so the build needs no protoc. Kyumei's
+# Compiles Temporal's protos with protox, so the build needs no protoc. Durable Inquiry's
 # build does the same, through tokeira-engine.
 temporalio-client = { workspace = true, features = ["vendored-protox"] }
 temporalio-common.workspace = true

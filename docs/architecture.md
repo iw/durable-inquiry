@@ -1,48 +1,51 @@
 # Architecture
 
-Kyumei has one job: turn evidence that an operator brings back into a
+Durable Inquiry has one job: turn evidence that an operator brings back into a
 diagnosis that can be audited. Diagnosis is deterministic, explanations may
 be reworded by a model under guard, and investigations are durable.
 
 ## Crates and dependency direction
 
+Every crate's name starts with `durable-inquiry-`, which the diagram leaves
+out; `durable-envision` is the simulator, a dependency.
+
 ```
-  kyumei-web (Topcoat)        kyumei-odori (Odori, tokeira, Temporal SDK)
+  web (Topcoat)               odori (Odori, tokeira, Temporal SDK)
      │      \                        /
      │       ▼                      ▼
-     │              kyumei-app ─────────────────────────────┐
+     │                 app ─────────────────────────────────┐
      │                  │                                   │
-     │  kyumei-diagnostics ─ kyumei-evidence ─ kyumei-knowledge ─ kyumei-diagrams
-     │                  │          │                        │
-     │           kyumei-domain     │                        ▼
-     ▼                             ▼                   kyumei-sim ──▶ tempdes
-  kyumei-collect ───────────▶ kyumei-samples ◀─────────────┘             ▲
-                                                       kyumei-extract ───┘
+     │       diagnostics ─ evidence ─ knowledge ─ diagrams  │
+     │                  │      │                            │
+     │               domain    │                            ▼
+     ▼                         ▼                           sim ──▶ durable-envision
+  collect ────────────────▶ samples ◀───────────────────────┘             ▲
+                                                           extract ───────┘
 ```
 
-- **kyumei-domain** is the vocabulary: investigations, evidence, observations,
+- **durable-inquiry-domain** is the vocabulary: investigations, evidence, observations,
   requests, hypotheses, findings, conclusions, provenance and epistemic status.
   It depends on no framework. Times are UTC throughout; `DisplayZone` writes
   them in a zone the operator chooses and reads times typed in it.
-- **kyumei-knowledge** loads versioned knowledge packs, validates them strictly,
+- **durable-inquiry-knowledge** loads versioned knowledge packs, validates them strictly,
   and implements the condition language. Its `updates` module compares what a
   pack pins with what a repository has upstream, given the tags and head the
   caller fetched. See [knowledge.md](knowledge.md).
-- **kyumei-evidence** turns a submission into an `Evidence` record. The raw
-  submission is kept, and Kyumei's reading of it sits beside it.
-- **kyumei-diagrams** is a typed diagram IR with validation, accessible SVG and
+- **durable-inquiry-evidence** turns a submission into an `Evidence` record. The raw
+  submission is kept, and Durable Inquiry's reading of it sits beside it.
+- **durable-inquiry-diagrams** is a typed diagram IR with validation, accessible SVG and
   text rendering, and time series charts drawn from data the caller prepares.
   It knows nothing about Temporal.
-- **kyumei-dashboards** reads Grafana dashboard JSON: panels, their queries
+- **durable-inquiry-dashboards** reads Grafana dashboard JSON: panels, their queries
   (enough PromQL to say which metrics and labels they read), units, decimals,
   thresholds and legends. It loads a directory of dashboards, finds the panels
   that read a metric, and checks panels against metric facts it is given. It
-  depends on nothing else of Kyumei's.
-- **kyumei-diagnostics** is the engine. It has no clock, no I/O and no model.
-- **kyumei-app** holds the commands, the `InvestigationService` port, the
+  depends on nothing else of Durable Inquiry's.
+- **durable-inquiry-diagnostics** is the engine. It has no clock, no I/O and no model.
+- **durable-inquiry-app** holds the commands, the `InvestigationService` port, the
   workspace view model, the Markdown export and fixture replay. Its
   `simulation` module runs the simulations an assessment says are due, with
-  `kyumei-sim`, and turns each run into evidence of its own. Its
+  `durable-inquiry-sim`, and turns each run into evidence of its own. Its
   `dashboards` module pairs the knowledge with dashboards: it chooses the panel
   for each group of evidence series, converts values into the panel's unit,
   builds the chart, and turns the pack's references into the links the
@@ -50,58 +53,58 @@ be reworded by a model under guard, and investigations are durable.
   range, the variables filled from the investigation, the queries) and draws
   what was read; the interface does the reading. `config` reads the
   configuration file (preferred time zones and environment profiles), and
-  `zone` rewrites the UTC times in Kyumei's own text into the chosen zone.
-- **kyumei-odori** runs investigations as durable Odori workflows.
-- **kyumei-web** is the Topcoat interface, and the only crate that knows
+  `zone` rewrites the UTC times in Durable Inquiry's own text into the chosen zone.
+- **durable-inquiry-odori** runs investigations as durable Odori workflows.
+- **durable-inquiry-web** is the Topcoat interface, and the only crate that knows
   Topcoat.
-- **kyumei-samples** is the sample block format and request codes. It
-  depends on no framework and on nothing else of Kyumei's. `kyumei-evidence`
-  reads blocks with it, and `kyumei-app` writes request codes.
-- **kyumei-collect** is the companion: a read-only client for the Prometheus
-  HTTP API and Grafana's data source proxy, and the `kyumei-collect` binary.
-  Of Kyumei it knows only `kyumei-samples`, so the companion carries no
+- **durable-inquiry-samples** is the sample block format and request codes. It
+  depends on no framework and on nothing else of Durable Inquiry's. `durable-inquiry-evidence`
+  reads blocks with it, and `durable-inquiry-app` writes request codes.
+- **durable-inquiry-collect** is the companion: a read-only client for the Prometheus
+  HTTP API and Grafana's data source proxy, and the `durable-inquiry-collect` binary.
+  Of Durable Inquiry it knows only `durable-inquiry-samples`, so the companion carries no
   model, agents or knowledge. The web crate uses its client for Collect now.
   See [collector.md](collector.md).
-- **kyumei-sim** runs [tempdes](https://github.com/iw/tempdes), a
+- **durable-inquiry-sim** runs [Durable Envision](https://github.com/iw/durable-envision), a
   discrete-event simulator of Temporal Server clusters, and scrapes its
   simulated metrics every 15 simulated seconds, as Prometheus scrapes a
-  cluster. Its `promql` module answers the PromQL Kyumei's requests use over
+  cluster. Its `promql` module answers the PromQL Durable Inquiry's requests use over
   those scrapes, and a run's answers are the sample blocks Collect now
   records. Its `dispatch` module builds and runs the scenario for the "big
-  enough?" check of a Task Queue's dispatch limit. Of Kyumei it knows only
-  `kyumei-samples`, and only `kyumei-app` uses it. `kyumei-app`'s tests work
+  enough?" check of a Task Queue's dispatch limit. Of Durable Inquiry it knows only
+  `durable-inquiry-samples`, and only `durable-inquiry-app` uses it. `durable-inquiry-app`'s tests work
   simulated incidents, each with one cause, through the Workflow Task
   diagnostic.
-- **kyumei** is the binary. It finds the data directory and configuration file
-  in the platform's places, and runs `kyumei knowledge updates`, which fetches
+- **durable-inquiry** is the binary. It finds the data directory and configuration file
+  in the platform's places, and runs `durable-inquiry knowledge updates`, which fetches
   tags and heads with `git ls-remote` and changed files from GitHub.
-- **kyumei-extract** stands apart: maintainer tools that generate knowledge
+- **durable-inquiry-extract** stands apart: maintainer tools that generate knowledge
   claims from Temporal and SDK checkouts (`gen-dc-claims`, `gen-metric-claims`,
-  `gen-sdk-metric-claims`). It reads dynamic configuration with tempdes's
+  `gen-sdk-metric-claims`). It reads dynamic configuration with Durable Envision's
   `config::registry_gen` and lexes Go with its helpers. It depends on no
-  Kyumei crate, and none depends on it.
-- **kyumei-demo**, in `demo/`, is the [demo](../demo/RUNBOOK.md)'s Temporal
+  Durable Inquiry crate, and none depends on it.
+- **durable-inquiry-demo**, in `demo/`, is the [demo](../demo/RUNBOOK.md)'s Temporal
   application: Workers and a load generator on Temporal's Rust SDK, whose
-  incidents Kyumei investigates. It depends on no Kyumei crate, and none
+  incidents Durable Inquiry investigates. It depends on no Durable Inquiry crate, and none
   depends on it.
 
-`crates/kyumei/tests/architecture.rs` enforces these rules with `cargo metadata`:
+`crates/durable-inquiry/tests/architecture.rs` enforces these rules with `cargo metadata`:
 
 - the domain has no framework dependencies;
-- Topcoat appears only in `kyumei-web`;
-- Odori and the Temporal SDK appear only in `kyumei-odori`, except that the
+- Topcoat appears only in `durable-inquiry-web`;
+- Odori and the Temporal SDK appear only in `durable-inquiry-odori`, except that the
   demo's program is built on the SDK;
 - the engine never depends on the application layers;
-- `kyumei-extract` and `kyumei-demo` are independent in both directions;
-- `kyumei-samples` depends on no framework and no other Kyumei crate, and
-  `kyumei-collect` on no Kyumei crate but `kyumei-samples`;
-- only `kyumei-web` and the `kyumei` binary use `kyumei-collect`, so only
+- `durable-inquiry-extract` and `durable-inquiry-demo` are independent in both directions;
+- `durable-inquiry-samples` depends on no framework and no other Durable Inquiry crate, and
+  `durable-inquiry-collect` on no Durable Inquiry crate but `durable-inquiry-samples`;
+- only `durable-inquiry-web` and the `durable-inquiry` binary use `durable-inquiry-collect`, so only
   they reach a metrics endpoint;
-- `kyumei-dashboards` depends on no framework and no other Kyumei crate, and
+- `durable-inquiry-dashboards` depends on no framework and no other Durable Inquiry crate, and
   no core crate depends on it;
-- tempdes appears only in `kyumei-sim`, which depends on no framework and no
-  Kyumei crate but `kyumei-samples`, and in `kyumei-extract` for its parser;
-- only `kyumei-app` uses `kyumei-sim`.
+- Durable Envision appears only in `durable-inquiry-sim`, which depends on no framework and no
+  Durable Inquiry crate but `durable-inquiry-samples`, and in `durable-inquiry-extract` for its parser;
+- only `durable-inquiry-app` uses `durable-inquiry-sim`.
 
 The spec's section 16 stops after "Topcoat → application". The rest of the
 direction is inferred, as recorded in [decisions.md](decisions.md).
@@ -115,7 +118,7 @@ direction is inferred, as recorded in [decisions.md](decisions.md).
 | `Opened` | Symptom, declared context and the description recorded as evidence `E0` |
 | `ContextAmended` | Server version, SDKs, scope, window or topology changed |
 | `EvidenceRequested` | A rendered request was issued |
-| `EvidenceSubmitted` | Raw evidence plus Kyumei's interpretation |
+| `EvidenceSubmitted` | Raw evidence plus Durable Inquiry's interpretation |
 | `InterpretationCorrected` | The operator corrected a binding, value, unit, window or exclusion |
 | `RequestDeclined` / `RequestSuperseded` / `RequestAnswered` | Request lifecycle |
 | `Assessed` | A full assessment: facts, hypothesis states, findings, next request |
@@ -127,7 +130,7 @@ nothing else. Replaying the log reproduces the investigation exactly.
 
 Commands (`SubmitEvidence`, `CorrectInterpretation`, `DeclineRequest`,
 `AmendContext`, `Reassess`, `RecordSimulation`) go through
-`kyumei_app::core::handle`. This pure
+`durable_inquiry_app::core::handle`. This pure
 function takes the investigation, the knowledge, the command and a timestamp,
 and returns the new events. It ingests evidence, re-assesses, settles the
 request lifecycle, chooses the next request and changes the conclusion. The
@@ -136,7 +139,7 @@ inside the durable workflow's activities.
 
 ## The diagnostic engine
 
-`kyumei_diagnostics::assess` runs six steps over the current investigation and
+`durable_inquiry_diagnostics::assess` runs six steps over the current investigation and
 the knowledge pack.
 
 1. **Facts** (`facts.rs`). Observations bound to a signal are converted to the
@@ -191,7 +194,7 @@ the knowledge pack.
 
 ## Evidence ingestion
 
-`kyumei_evidence::ingest` is the only entry point, for manual submission and
+`durable_inquiry_evidence::ingest` is the only entry point, for manual submission and
 for Collect now. Only the `EvidenceOrigin` differs.
 
 **Detection.** Written observations and typed structured values are known by
@@ -199,7 +202,7 @@ their channel. Binary uploads with a recognised media type, such as
 screenshots, are attachments, and only their metadata is read. Text is tried
 in this order:
 
-1. a Kyumei sample block, known by its first line wherever it appears;
+1. a Durable Inquiry sample block, known by its first line wherever it appears;
 2. JSON, either Prometheus API output (matrix, vector or scalar) or other JSON
    such as DescribeTaskQueue output;
 3. dynamic-config YAML;
@@ -252,13 +255,13 @@ untouched raw interpretation.
 
 ## Durable investigations on Odori
 
-`kyumei-odori` implements `InvestigationService` with one workflow execution
+`durable-inquiry-odori` implements `InvestigationService` with one workflow execution
 per investigation, on an embedded tokeira engine.
 
 ```
 web ──update(submit_once)──► InvestigationWorkflow ──activity──► core::handle (deterministic)
                              │
-                             ├── activity: simulate (tempdes, when a simulation is due)
+                             ├── activity: simulate (Durable Envision, when a simulation is due)
                              ├── child workflow: Odori AgentRun ("kyumei-explainer")
                              │     on queue kyumei-agents, when --explainer is set
                              └── activities: prepare_explanation, validate_explanation
@@ -288,12 +291,15 @@ web ──update(submit_once)──► InvestigationWorkflow ──activity─�
 
   A failure is surfaced with its cause chain, and the deterministic text stays.
 - **Persistence.** The engine runs with in-memory storage and writes a snapshot
-  every `--snapshot-interval` seconds and on shutdown. Kyumei keeps a
+  every `--snapshot-interval` seconds and on shutdown. Durable Inquiry keeps a
   **projection** of each event log under `projections/`, plus an index of
   investigations. A projection is written after every applied command, and
-  brought up to date whenever Kyumei reads a longer log from the engine: at
+  brought up to date whenever Durable Inquiry reads a longer log from the engine: at
   start, when it shows or lists investigations, and before it stops. Explanations
-  are recorded after the command that asked for them.
+  are recorded after the command that asked for them. The snapshot records
+  the task queues (`kyumei-investigations`, `kyumei-agents`) and the agent's
+  name (`kyumei-explainer`). They keep the names they were first given, when
+  Durable Inquiry was called Kyumei, so that a snapshot written then still runs.
 - **Restart.** On start, every indexed investigation is checked against its
   projection:
   - If the engine knows the workflow and it is up to date, nothing happens. If
@@ -318,8 +324,8 @@ web ──update(submit_once)──► InvestigationWorkflow ──activity─�
 - **Model sandbox.** Model harnesses run with their working directory set to
   an empty `agent-sandbox` inside the data directory.
 
-`LocalInvestigations` in `kyumei-app` is the same service in process, with an
-optional JSON journal. It backs `--in-process`, the tests and `kyumei replay`.
+`LocalInvestigations` in `durable-inquiry-app` is the same service in process, with an
+optional JSON journal. It backs `--in-process`, the tests and `durable-inquiry replay`.
 With simulations on, it runs and records the ones due after each command.
 
 ## Explanations
@@ -360,7 +366,7 @@ Diagrams are data. Three kinds are built from the assessment:
 - **evidence relationship**: observations → the hypotheses they support,
   weaken, eliminate or establish.
 
-`kyumei-diagrams` validates every diagram before rendering it.
+`durable-inquiry-diagrams` validates every diagram before rendering it.
 
 - **All diagrams** need a title and a description, a bounded number of
   uniquely identified and labelled nodes, no self edges, and edges and
@@ -377,7 +383,7 @@ cannot disagree.
 
 ## Web
 
-`kyumei-web` is a Topcoat application.
+`durable-inquiry-web` is a Topcoat application.
 
 - **Pages.** The landing page lists investigations and opens new ones. The
   investigation workspace shows Situation, Current assessment, Next evidence
@@ -387,8 +393,8 @@ cannot disagree.
 - **Actions.** Forms post to routes that issue commands. Uploads are
   multipart. **Collect now** posts to
   `/investigations/{id}/requests/{request}/collect`: the route builds the
-  request's collection plan in `kyumei-app`, reads it with the configured
-  `kyumei_collect::Collector`, and submits the sample block as evidence with
+  request's collection plan in `durable-inquiry-app`, reads it with the configured
+  `durable_inquiry_collect::Collector`, and submits the sample block as evidence with
   a `Collector` origin. Without an endpoint, or with values the queries still
   need, it explains on the request instead.
 - **Live updates.** A server-sent-event stream tells an open workspace to
@@ -401,7 +407,7 @@ cannot disagree.
   upload changes them while the server runs.
 - **Linked panels.** `/panels/{dashboard}/{panel}` and
   `/investigations/{id}/panels/{dashboard}/{panel}` plan the panel's reading in
-  `kyumei-app`, read it with the same `Collector` as Collect now, and draw it.
+  `durable-inquiry-app`, read it with the same `Collector` as Collect now, and draw it.
   **Add as evidence** posts to the investigation's panel route plus
   `/evidence`, which reads the panel again and submits the block like Collect
   now.

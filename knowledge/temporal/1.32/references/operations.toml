@@ -4,16 +4,16 @@
 #
 # Every reference cites the repository at the commit its source pins, with the path
 # and the section heading or the dashboard uid and panel id. The repository has no
-# licence, so Kyumei links to it and reads an operator's own copy: none of its text
+# licence, so Durable Inquiry links to it and reads an operator's own copy: none of its text
 # or dashboards is copied here. Titles and headings are quoted only to cite them, and
-# `why` is Kyumei's own account of the relevance.
+# `why` is Durable Inquiry's own account of the relevance.
 #
 # The repository has no tags or releases, so a reference records the version of
 # what it cites where the repository declares one: a dashboard's version as its
 # title gives it, and the dashboard version a playbook needs, from the playbooks
 # index. Runbooks carry none.
 #
-# `kyumei knowledge verify --source temporal-server-operations-5a71c36=<checkout>`
+# `durable-inquiry knowledge verify --source temporal-server-operations-5a71c36=<checkout>`
 # checks every title, section, panel and version at the pinned commit.
 
 [[reference]]
@@ -22,7 +22,7 @@ kind = "runbook"
 title = "WFT Schedule-To-Start Latency Critical"
 source = "temporal-server-operations-5a71c36"
 path = "observability/alerts/sdk/runbooks/19-wft-schedule-to-start-critical.md"
-why = "Alert 19 fires when Workflow Task schedule-to-start stays above 5 s for five minutes. Its triage looks at the Workers, their pollers and their slots, the stages Kyumei's diagnostic starts with."
+why = "Alert 19 fires when Workflow Task schedule-to-start stays above 5 s for five minutes. Its triage looks at the Workers, their pollers and their slots, the stages Durable Inquiry's diagnostic starts with."
 link = [
   { diagnostic = "wft-schedule-to-start" },
   { diagnostic = "wft-schedule-to-start", requests = ["wft-schedule-to-start"] },
@@ -47,7 +47,7 @@ title = "Worker Task Slots Exhausted"
 source = "temporal-server-operations-5a71c36"
 path = "observability/alerts/sdk/runbooks/14-worker-slots-exhausted.md"
 section = "WorkflowWorker"
-why = "Alert 14 fires when a Worker has no free slot. This section covers Workflow Task slots: what to check when Kyumei finds them exhausted."
+why = "Alert 14 fires when a Worker has no free slot. This section covers Workflow Task slots: what to check when Durable Inquiry finds them exhausted."
 link = [
   { diagnostic = "wft-schedule-to-start", conclusions = ["worker-slot-exhaustion"], hypotheses = ["worker-slot-exhaustion"], requests = ["workflow-worker-slots"] },
 ]
@@ -59,7 +59,7 @@ title = "Worker Task Slots Exhausted"
 source = "temporal-server-operations-5a71c36"
 path = "observability/alerts/sdk/runbooks/14-worker-slots-exhausted.md"
 section = "ActivityWorker"
-why = "Alert 14 fires when a Worker has no free slot. This section covers Activity slots: what to check when Kyumei finds them exhausted."
+why = "Alert 14 fires when a Worker has no free slot. This section covers Activity slots: what to check when Durable Inquiry finds them exhausted."
 link = [
   { diagnostic = "activity-schedule-to-start", conclusions = ["activity-slot-exhaustion"], hypotheses = ["activity-slot-exhaustion"], requests = ["activity-worker-slots"] },
 ]
@@ -124,7 +124,7 @@ source = "temporal-server-operations-5a71c36"
 path = "playbooks/change-task-queue-partitions.md"
 section = "Detecting and Fixing an Existing `Write > Read` Misconfiguration"
 version = { version = "v1.4.0", of = "needs-dashboard", dashboard = "Task Queue Partitions", path = "playbooks/README.md", line = 46, excerpt = "[Task Queue Partitions](../observability/dashboards/server/task-queue-partitions-readme.md) v1.4.0" }
-why = "How to confirm and fix a Task Queue with more write partitions than read partitions, the misconfiguration Kyumei tests for."
+why = "How to confirm and fix a Task Queue with more write partitions than read partitions, the misconfiguration Durable Inquiry tests for."
 link = [
   { diagnostic = "wft-schedule-to-start", hypotheses = ["partition-write-read-mismatch"], requests = ["partition-config"] },
 ]
@@ -195,7 +195,7 @@ kind = "runbook"
 title = "System Overload Throttling"
 source = "temporal-server-operations-5a71c36"
 path = "observability/alerts/server/runbooks/30-system-overload-throttling.md"
-why = "Alert 30 fires on the SystemOverloaded and CircuitBreakerOpen causes, which Kyumei recognises in the breakdown by cause but does not diagnose."
+why = "Alert 30 fires on the SystemOverloaded and CircuitBreakerOpen causes, which Durable Inquiry recognises in the breakdown by cause but does not diagnose."
 link = [
   { diagnostic = "resource-exhausted", requests = ["rejections-by-cause"] },
 ]
@@ -219,7 +219,7 @@ source = "temporal-server-operations-5a71c36"
 path = "playbooks/history-persistence-qps-limits.md"
 section = "2.3 Which check rejects the call, and which scope you see"
 version = { version = "v2.16.0+", of = "needs-dashboard", dashboard = "Temporal Server", path = "playbooks/README.md", line = 36, excerpt = "[Temporal Server](../observability/dashboards/server/temporal-server-readme.md#3-persistence-requests-latencies-and-errors) v2.16.0+" }
-why = "Which persistence limit refused a call, read from the scope it reports, as Kyumei's persistence limit conclusions read it."
+why = "Which persistence limit refused a call, read from the scope it reports, as Durable Inquiry's persistence limit conclusions read it."
 link = [
   { diagnostic = "resource-exhausted", conclusions = ["persistence-namespace-limit", "persistence-host-limit"], hypotheses = ["persistence-namespace-limit", "persistence-host-limit"] },
 ]
@@ -444,7 +444,7 @@ kind = "runbook"
 title = "Runbook: Visibility Store Write Errors"
 source = "temporal-server-operations-5a71c36"
 path = "observability/alerts/server/runbooks/59a-visibility-store-write-errors.md"
-why = "Alerts 59a cover visibility writes failing or slow, per store: what Kyumei's store failing and slow writes conclusions point to."
+why = "Alerts 59a cover visibility writes failing or slow, per store: what Durable Inquiry's store failing and slow writes conclusions point to."
 link = [
   { diagnostic = "visibility", conclusions = ["store-errors", "slow-writes"], hypotheses = ["store-errors", "slow-writes"], requests = ["visibility-persistence-errors", "visibility-persistence-latency"] },
 ]

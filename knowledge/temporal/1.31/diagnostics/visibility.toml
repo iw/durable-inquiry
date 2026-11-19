@@ -306,7 +306,7 @@ body = "sum by (operation, resource_exhausted_cause, resource_exhausted_scope) (
 absent_reads_zero = { witness = 'sum(rate(service_requests{service_name="frontend", namespace="{namespace}", operation=~"ListWorkflowExecutions|CountWorkflowExecutions|ScanWorkflowExecutions|ListOpenWorkflowExecutions|ListClosedWorkflowExecutions|ListArchivedWorkflowExecutions|ListSchedules|CountSchedules|ListBatchOperations"}[1m]))', because = "server.request-errors-counted-on-error" }
 unit = "per_second"
 claims = ["server.service_errors_resource_exhausted", "behaviour.visibility-api-rejections", "limit.frontend-visibility-rps", "server.request-errors-counted-on-error"]
-note = "keep the breakdown by cause and scope: a cause with no series did not occur, and Kyumei reads it as zero"
+note = "keep the breakdown by cause and scope: a cause with no series did not occur, and Durable Inquiry reads it as zero"
 
 [[request]]
 id = "visibility-persistence-refusals"
