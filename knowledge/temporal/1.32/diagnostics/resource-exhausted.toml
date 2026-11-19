@@ -177,7 +177,7 @@ body = "sum by (resource_exhausted_cause, resource_exhausted_scope) (rate(servic
 absent_reads_zero = { witness = 'sum(rate(service_requests{service_name="frontend", namespace="{namespace}"}[1m]))', because = "server.request-errors-counted-on-error" }
 unit = "per_second"
 claims = ["server.service_errors_resource_exhausted", "behaviour.resource-exhausted-accounting", "behaviour.persistence-throttle-metrics", "server.request-errors-counted-on-error"]
-note = "keep the breakdown by both labels: a cause with no series did not occur, and Kyumei reads it as zero"
+note = "keep the breakdown by both labels: a cause with no series did not occur, and Durable Inquiry reads it as zero"
 
 [[request]]
 id = "frontend-requests"

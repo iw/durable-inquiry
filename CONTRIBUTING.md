@@ -1,7 +1,7 @@
-# Contributing to Kyumei
+# Contributing to Durable Inquiry
 
 The most useful contributions are fixes, knowledge verified against Temporal's source,
-fixtures that pin a diagnosis down, and diagnostics for symptoms Kyumei doesn't yet
+fixtures that pin a diagnosis down, and diagnostics for symptoms Durable Inquiry doesn't yet
 recognise.
 
 ## Getting started
@@ -10,10 +10,10 @@ Install Rust with [rustup](https://rustup.rs); `rust-toolchain.toml` pins the to
 and its components. Then:
 
 ```console
-cargo run -p kyumei -- serve --demo 3 --demo-fixture activity-worker-rate-limit
+cargo run -p durable-inquiry -- serve --demo 3 --demo-fixture activity-worker-rate-limit
 ```
 
-and open <http://127.0.0.1:7373/>. [README.md](README.md) introduces Kyumei,
+and open <http://127.0.0.1:7373/>. [README.md](README.md) introduces Durable Inquiry,
 [docs/architecture.md](docs/architecture.md) its crates, and
 [docs/knowledge.md](docs/knowledge.md) the knowledge packs.
 
@@ -25,11 +25,11 @@ Run from the repository root:
 cargo fmt --check
 cargo clippy --workspace --all-targets --locked -- -D warnings
 cargo test --workspace --locked
-cargo run -p kyumei --locked -- knowledge check
+cargo run -p durable-inquiry --locked -- knowledge check
 ```
 
 - A knowledge change cites Temporal's source at a pinned revision, by path, line and
-  excerpt, and passes `kyumei knowledge verify` against the sources you have;
+  excerpt, and passes `durable-inquiry knowledge verify` against the sources you have;
   [docs/knowledge.md](docs/knowledge.md) explains how.
 - A change to a diagnosis comes with a fixture under `fixtures/investigations/`.
 - Docs describe the current state, in British spelling.
@@ -44,7 +44,7 @@ cargo run -p kyumei --locked -- knowledge check
 
 ## Bugs and vulnerabilities
 
-Report a bug as an issue with the symptom, the evidence you gave Kyumei, and what it
+Report a bug as an issue with the symptom, the evidence you gave Durable Inquiry, and what it
 concluded: an investigation's Export Markdown has all three. Report a vulnerability
 privately, as [SECURITY.md](SECURITY.md) describes.
 

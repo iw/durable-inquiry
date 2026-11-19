@@ -1,6 +1,6 @@
 # Knowledge
 
-Everything Kyumei knows about Temporal lives in versioned knowledge packs under
+Everything Durable Inquiry knows about Temporal lives in versioned knowledge packs under
 `knowledge/`. The engine has no Temporal-specific code. Metric names,
 configuration keys, API fields, behaviours, thresholds, hypotheses, rules and
 evidence requests are all data. The data is loaded strictly, cross-checked,
@@ -42,7 +42,7 @@ knowledge/temporal/1.32/
 ├── behaviour/request-metrics.toml  when request and failure counters first appear
 ├── references/operations.toml  runbooks, playbook sections and dashboard panels the diagnostics link to
 └── diagnostics/
-    ├── heuristics.toml        Kyumei's own thresholds (not Temporal behaviour)
+    ├── heuristics.toml        Durable Inquiry's own thresholds (not Temporal behaviour)
     ├── wft-schedule-to-start.toml        Workflow Task schedule-to-start
     ├── activity-schedule-to-start.toml   Activity schedule-to-start
     ├── history-limits.toml               Workflows terminated by, or nearing, the history limits
@@ -57,7 +57,7 @@ knowledge/temporal/1.32/
     └── workflow-task-failures.toml       Workflow Tasks failing and retried
 ```
 
-`kyumei knowledge check` summarises each pack:
+`durable-inquiry knowledge check` summarises each pack:
 
 | Pack | Verified for | Settings and metrics swept for | Claims | Unverified |
 |---|---|---|---|---|
@@ -97,7 +97,7 @@ and in both, the 61 metrics of the Core, Go and Java SDKs.
 
 ## Claims
 
-A claim is one statement Kyumei relies on. There are five kinds, each with its
+A claim is one statement Durable Inquiry relies on. There are five kinds, each with its
 own TOML table, and each claim has a category. Metrics and statements state
 their category; the other kinds have a fixed one.
 
@@ -107,12 +107,12 @@ their category; the other kinds have a fixed one.
 | `[[api_field]]` | API field | `api.task_queue_stats.approximate_backlog_age` |
 | `[[dynamic_config]]` | dynamic configuration | `dc.matching.numTaskqueueReadPartitions` |
 | `[[statement]]` | `behaviour`, `limit`, `sdk-configuration` or `cli-command` | `behaviour.frontend-priorities` |
-| `[[heuristic]]` | Kyumei diagnostic heuristic | `heuristic.dispatch-at-limit` |
+| `[[heuristic]]` | Durable Inquiry diagnostic heuristic | `heuristic.dispatch-at-limit` |
 
 The distinctions are deliberate and enforced:
 
 - **Metrics** record their source name and each *exposition* name separately.
-  Kyumei never assumes a `temporal_` prefix:
+  Durable Inquiry never assumes a `temporal_` prefix:
   - Core-based SDKs add the prefix by default.
   - The Go and Java SDKs hard-code it into the name.
   - Each SDK's exporters then add their own suffixes: `_total` on counters and a
@@ -140,9 +140,9 @@ The distinctions are deliberate and enforced:
   by JSON path, never scraped, and are labelled as API fields everywhere.
 - **Dynamic configuration** records the key, its setting constructor, its
   type, its default and the constraints it can be set by.
-- **Heuristics** are Kyumei's own thresholds, such as "dispatch at 95% of the
+- **Heuristics** are Durable Inquiry's own thresholds, such as "dispatch at 95% of the
   limit is pinned". They must cite the `authored` source, and the interface
-  presents them as Kyumei's judgement, never as Temporal behaviour. A
+  presents them as Durable Inquiry's judgement, never as Temporal behaviour. A
   heuristic lists the claims it `relies_on`.
 
 ### Version scope, verification and provenance
@@ -208,7 +208,7 @@ The 1.31 pack's `sources/sources.toml` lists 62 sources:
 - the Go standard library `go1.26.2`, `go1.26.4` and `go1.26.8`, the versions
   the 1.31 releases' `go.mod` requires, for how `database/sql` waits for a pooled
   connection;
-- Kyumei's authored heuristics;
+- Durable Inquiry's authored heuristics;
 - [tsurdilo/temporal-server-operations](https://github.com/tsurdilo/temporal-server-operations)
   at commit `5a71c36`, made on 9 October 2026, the playbooks, alert runbooks
   and Grafana dashboards the [references](#references) cite.
@@ -221,12 +221,12 @@ repository.
 
 ### Re-verifying
 
-`kyumei knowledge verify` re-reads every excerpt from local checkouts. An
+`durable-inquiry knowledge verify` re-reads every excerpt from local checkouts. An
 excerpt found within three lines of the recorded line is reported as drift,
 with the line it is now on. One found nowhere near it is a failure.
 
 ```bash
-kyumei knowledge verify \
+durable-inquiry knowledge verify \
   --source temporal-server-v1.31.0=../temporal \
   --source temporal-api-go-v1.62.8=$(go env GOMODCACHE)/go.temporal.io/api@v1.62.8 \
   --source tally-v4.1.17=$(go env GOMODCACHE)/github.com/uber-go/tally/v4@v4.1.17 \
@@ -264,10 +264,10 @@ to another. A Go module's paths are
 relative to the module root, so a handler from the `sdk-go` repository is
 given as its `contrib/…` directory.
 
-The same check runs as a test when `KYUMEI_VERIFY_SOURCES` lists
+The same check runs as a test when `DURABLE_INQUIRY_VERIFY_SOURCES` lists
 `id=path` pairs separated by `;`. Against the sources at hand, every one of the
 43,575 citations it checks is confirmed at its exact line, the 98 references at
-`5a71c36` among them. Kyumei's heuristics cite nothing to check, and the
+`5a71c36` among them. Durable Inquiry's heuristics cite nothing to check, and the
 citations of a source not at hand, such as a Micrometer release, are listed as
 skipped.
 
@@ -325,7 +325,7 @@ and `limit.dispatch-applied-on-change` gives the detail.
 Reference knowledge that Temporal declares in a regular form is generated by a
 program, not written by hand. Today that is every dynamic configuration setting
 the server registers, every metric it defines, and every metric the Core, Go
-and Java SDKs define. The generators are in the `kyumei-extract` crate. The
+and Java SDKs define. The generators are in the `durable-inquiry-extract` crate. The
 server and Go generators share a small Go lexer; Core and Java have their own.
 
 ### Dynamic configuration
@@ -333,22 +333,22 @@ server and Go generators share a small Go lexer; Core and Java have their own.
 `gen-dc-claims` walks a Temporal checkout and
 finds every `New<Scope><Type>Setting…(` call. It records each setting's key,
 constructor, value type, default, constraint keys and description, and cites
-the line holding the key literal as provenance. Its parser is tempdes's
+the line holding the key literal as provenance. Its parser is Durable Envision's
 `config::registry_gen`, the one `gen-dc-registry` runs, which the extractor
 depends on rather than copies.
 
 ```bash
 git clone --depth 1 --branch v1.31.0 https://github.com/temporalio/temporal ../temporal
-cargo run -p kyumei-extract --bin gen-dc-claims -- ../temporal \
+cargo run -p durable-inquiry-extract --bin gen-dc-claims -- ../temporal \
   -o knowledge/temporal/1.31/generated/dynamic-config.toml
 ```
 
 - **Check mode.** `--check FILE` regenerates in memory and compares. It reuses
   the file's verification date, so it reports only what changed in the source,
   one line per claim field, and exits 1 when anything did.
-- **As a test.** `crates/kyumei-extract/tests/up_to_date.rs` makes the same
-  check, version sweep included, when `KYUMEI_TEMPORAL_SOURCE` points at a
-  v1.31.0 checkout and `KYUMEI_TEMPORAL_SWEEP` lists the other releases'
+- **As a test.** `crates/durable-inquiry-extract/tests/up_to_date.rs` makes the same
+  check, version sweep included, when `DURABLE_INQUIRY_TEMPORAL_SOURCE` points at a
+  v1.31.0 checkout and `DURABLE_INQUIRY_TEMPORAL_SWEEP` lists the other releases'
   checkouts separated by `;`, and skips otherwise.
 - **Constraint keys.** `constrained_by` uses the YAML keys an operator writes,
   read from `common/dynamicconfig/setting_gen.go` and `yaml_loader.go`:
@@ -386,7 +386,7 @@ cargo run -p kyumei-extract --bin gen-dc-claims -- ../temporal \
    their claims say the server may never record them.
 
 ```bash
-cargo run -p kyumei-extract --bin gen-metric-claims -- ../temporal \
+cargo run -p durable-inquiry-extract --bin gen-metric-claims -- ../temporal \
   -o knowledge/temporal/1.31/generated/server-metrics.toml
 ```
 
@@ -434,7 +434,7 @@ configuration.
 name, `sdk.<name>`:
 
 ```bash
-cargo run -p kyumei-extract --bin gen-sdk-metric-claims -- \
+cargo run -p durable-inquiry-extract --bin gen-sdk-metric-claims -- \
   --core ../sdk-rust --go "$(go env GOMODCACHE)/go.temporal.io/sdk@v1.44.0" \
   --java ../sdk-java -o knowledge/temporal/1.31/generated/sdk-metrics.toml
 ```
@@ -471,7 +471,7 @@ milliseconds by default but seconds with `use_seconds_for_durations`. Binding
 then takes the first and says the unit was assumed, unless the operator states
 it.
 
-`KYUMEI_SDK_SOURCES="core=PATH;go=PATH;java=PATH"` enables the SDK check in the
+`DURABLE_INQUIRY_SDK_SOURCES="core=PATH;go=PATH;java=PATH"` enables the SDK check in the
 `up_to_date` test.
 
 ### Annotations
@@ -491,7 +491,7 @@ provenance = [
 
 Annotations can add notes and provenance to metrics, dynamic configuration,
 API fields and statements. The verifier re-checks their provenance like any
-other. Heuristics are Kyumei's own and written by hand, so they take no
+other. Heuristics are Durable Inquiry's own and written by hand, so they take no
 annotations.
 
 A metric annotation can also supply what a definition leaves out:
@@ -532,7 +532,7 @@ The 1.31 pack's generators run against every release from 1.27.0 to 1.31.4,
 and one file holds the result:
 
 ```bash
-cargo run -p kyumei-extract --bin gen-dc-claims -- ../temporal-1.31.0 \
+cargo run -p durable-inquiry-extract --bin gen-dc-claims -- ../temporal-1.31.0 \
   --sweep ../temporal-1.27.0 --sweep ../temporal-1.27.1 … \
   -o knowledge/temporal/1.31/generated/dynamic-config.toml
 ```
@@ -607,7 +607,7 @@ verified. The 1.32 pack is made this way:
 outside the pack: the alert runbooks, playbook sections and Grafana dashboard
 panels of [tsurdilo/temporal-server-operations](https://github.com/tsurdilo/temporal-server-operations).
 A reference names what it bears on (the diagnostic as a whole, conclusions,
-hypotheses or requests) and says why, in Kyumei's words:
+hypotheses or requests) and says why, in Durable Inquiry's words:
 
 ```toml
 [[reference]]
@@ -617,7 +617,7 @@ title = "Worker Task Slots Exhausted"  # the document's first heading, or the pa
 source = "temporal-server-operations-5a71c36"
 path = "observability/alerts/sdk/runbooks/14-worker-slots-exhausted.md"
 section = "WorkflowWorker"             # a heading as written; its anchor is made from it
-why = "Alert 14 fires when a Worker has no free slot. This section covers Workflow Task slots: what to check when Kyumei finds them exhausted."
+why = "Alert 14 fires when a Worker has no free slot. This section covers Workflow Task slots: what to check when Durable Inquiry finds them exhausted."
 link = [
   { diagnostic = "wft-schedule-to-start", conclusions = ["worker-slot-exhaustion"], hypotheses = ["worker-slot-exhaustion"], requests = ["workflow-worker-slots"] },
 ]
@@ -652,17 +652,17 @@ at 5a71c36, 9 October 2026".
 
 There are 98: 27 runbooks, 13 playbook sections and 58 panels. Every diagnostic
 with a matching runbook links it; history limits and Java's Workflow threads
-have none, and link only panels. The source has no licence, so Kyumei cites and
+have none, and link only panels. The source has no licence, so Durable Inquiry cites and
 links to it at the pinned commit, and copies none of it: titles and headings
 appear only to cite them.
 
 Loading checks that a reference cites a repository pinned by commit, names a
 Markdown file for a runbook or playbook and a dashboard's JSON for a panel, and
 links only to conclusions, hypotheses and requests its diagnostics define.
-`kyumei knowledge verify --source temporal-server-operations-5a71c36=<checkout>`
+`durable-inquiry knowledge verify --source temporal-server-operations-5a71c36=<checkout>`
 checks each reference in the checkout: the file exists, the document's first
 heading is the recorded title, the section's heading exists and has the anchor
-Kyumei links (GitHub's, numbered after an earlier heading with the same text),
+Durable Inquiry links (GitHub's, numbered after an earlier heading with the same text),
 and the panel is in its dashboard, by uid, under its title. A version's
 excerpt must still be on its line, and a dashboard's version in its title. A
 checkout at another commit than the pin fails every reference. On 14 October
@@ -677,7 +677,7 @@ commit, update the source, and fix what `verify` reports.
 
 ## Updates upstream
 
-`kyumei knowledge updates` lists what is newer than the sources the packs pin.
+`durable-inquiry knowledge updates` lists what is newer than the sources the packs pin.
 For each repository it reads the tags and the default branch's commit with
 `git ls-remote`, which works on any Git host, and reports:
 
@@ -857,7 +857,7 @@ absent_reads_zero = { witness = 'sum(rate(temporal_long_request{…}[1m]))', bec
   `absent_reads_zero` names a witness, a counter the same source keeps
   whenever this one could count (every long poll beside the failed ones, every
   request beside the rejected ones), and the statement that says so. The
-  witness is rendered as the query is, and Collect now and `kyumei-collect`
+  witness is rendered as the query is, and Collect now and `durable-inquiry-collect`
   run it with the query. When the query returns no series and the witness has
   samples in the same answer, the signal reads as zero at the witness's sample
   times. Its binding says it was read beside the witness, and a note cites the
@@ -901,7 +901,7 @@ produces = "ceiling_simulated_sts"
 claims = ["heuristic.simulation-reproduces", "limit.task-queue-dispatch"]
 ```
 
-- **Models.** `model` names a scenario `kyumei-sim` can build, and so the
+- **Models.** `model` names a scenario `durable-inquiry-sim` can build, and so the
   inputs it takes. `task-queue-dispatch` runs one Task Queue whose only
   constraint is its dispatch limit, and needs `add_rate`, `dispatch_limit`,
   `read_partitions` and `symptom`. Each input reads a statistic of a signal.
@@ -942,7 +942,7 @@ only where a baseline is certain:
 
 Any other statistic of a signal with samples in the window always has a value.
 
-A placeholder can divide one value by another where Kyumei can name the
+A placeholder can divide one value by another where Durable Inquiry can name the
 quotient's unit. A count over a rate a second is how long the count takes at
 that rate, and reads in minutes or hours once it is long:
 
@@ -990,12 +990,12 @@ A pack that fails any check does not load. Every problem is reported at once.
   - A conclusion must rest on hypothesis states.
   - A statement's optional segments are closed, not nested, and each quotes a
     placeholder. A baseline is quoted outside one only where it is certain.
-    A quotient divides values whose units Kyumei can divide.
+    A quotient divides values whose units Durable Inquiry can divide.
   - Stage orders are unique.
   - Symptom patterns must compile.
   - A request's cost is between 1 and 5.
 
-`crates/kyumei-knowledge/src/tests.rs` loads malformed and contradictory
+`crates/durable-inquiry-knowledge/src/tests.rs` loads malformed and contradictory
 packs to check that they are rejected:
 
 - undeclared labels and label values;
@@ -1022,9 +1022,9 @@ packs to check that they are rejected:
 3. **Keep judgement separate.** Put thresholds and interpretations in
    `heuristics.toml`, and explain the rationale.
 4. **Run the checks.**
-   - Run `kyumei knowledge check`.
-   - Run `kyumei knowledge verify` against your checkouts.
-   - Run `cargo test -p kyumei-knowledge`.
+   - Run `durable-inquiry knowledge check`.
+   - Run `durable-inquiry knowledge verify` against your checkouts.
+   - Run `cargo test -p durable-inquiry-knowledge`.
 5. **Prove behaviour changes with a fixture.** If the change affects a
    diagnosis, add or update a fixture under `fixtures/investigations/` so the
    new behaviour is tested end to end.

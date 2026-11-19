@@ -1,14 +1,14 @@
-//! Synthetic incidents for a Kyumei demo, against a Temporal 1.31 server, on Temporal's Rust SDK.
+//! Synthetic incidents for a Durable Inquiry demo, against a Temporal 1.31 server, on Temporal's Rust SDK.
 //!
 //! The Worker runs an Invoice Workflow whose one Activity waits as long as the Worker is told
 //! to, as a slow downstream call would, and serves the SDK's metrics for Prometheus. The load
 //! starts Invoice Workflows at a steady rate. `describe` prints DescribeTaskQueue with
-//! statistics, as JSON to paste into Kyumei. RUNBOOK.md has the two incidents step by step.
+//! statistics, as JSON to paste into Durable Inquiry. RUNBOOK.md has the two incidents step by step.
 //!
 //! ```text
-//! kyumei-demo worker   --task-queue invoices --slots 10 --activity-seconds 0.5 --metrics-port 9101
-//! kyumei-demo load     --task-queue invoices --rate 6
-//! kyumei-demo describe --task-queue payouts
+//! durable-inquiry-demo worker   --task-queue invoices --slots 10 --activity-seconds 0.5 --metrics-port 9101
+//! durable-inquiry-demo load     --task-queue invoices --rate 6
+//! durable-inquiry-demo describe --task-queue payouts
 //! ```
 
 mod invoice;
@@ -75,7 +75,7 @@ const SCHEDULE_TO_START_BUCKETS_MS: [f64; 25] = [
 const DEFAULT_SLOTS: usize = 100;
 
 #[derive(Parser)]
-#[command(about = "Synthetic incidents for a Kyumei demo, against a Temporal 1.31 server")]
+#[command(about = "Synthetic incidents for a Durable Inquiry demo, against a Temporal 1.31 server")]
 struct Cli {
     #[command(subcommand)]
     command: Command,

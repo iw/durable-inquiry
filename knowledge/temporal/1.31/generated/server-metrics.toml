@@ -4,7 +4,7 @@
 # sweep. Do not edit: regenerate it, and put notes and extra provenance in an annotation
 # file instead (docs/knowledge.md).
 #
-#   cargo run -p kyumei-extract --bin gen-metric-claims -- <1.31.0 checkout> \
+#   cargo run -p durable-inquiry-extract --bin gen-metric-claims -- <1.31.0 checkout> \
 #       --sweep <checkout of each other release> -o <this file>
 #
 # Each claim is written as 1.31.0 renders it, or as the newest release that has

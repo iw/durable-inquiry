@@ -1,6 +1,6 @@
-# Kyumei 究明
+# Durable Inquiry
 
-[![CI](https://github.com/iw/kyumei/actions/workflows/ci.yml/badge.svg)](https://github.com/iw/kyumei/actions/workflows/ci.yml)
+[![CI](https://github.com/iw/durable-inquiry/actions/workflows/ci.yml/badge.svg)](https://github.com/iw/durable-inquiry/actions/workflows/ci.yml)
 [![Licence: Apache-2.0](https://img.shields.io/badge/licence-Apache--2.0-blue.svg)](LICENSE)
 [![Rust 1.98.1](https://img.shields.io/badge/rust-1.98.1-orange.svg?logo=rust)](rust-toolchain.toml)
 [![Temporal Server 1.31 and 1.32](https://img.shields.io/badge/Temporal%20Server-1.31%20%7C%201.32-1a73e8.svg)](#status)
@@ -8,7 +8,11 @@
 
 Evidence-driven diagnostics for Temporal.
 
-Kyumei helps an operator find out *why* a running Temporal deployment is
+Durable Inquiry was called Kyumei (究明) before.
+[Upgrading from Kyumei](docs/operator-guide.md#upgrading-from-kyumei) lists every name
+that changed with it, from the commands to the data directory.
+
+Durable Inquiry helps an operator find out *why* a running Temporal deployment is
 misbehaving. It turns each piece of evidence (metrics it reads from your Prometheus
 or Grafana, CLI and API output, configuration) into a structured, durable
 investigation. It keeps competing hypotheses open and asks for the one piece of
@@ -20,10 +24,10 @@ It is not a dashboard and not a chatbot. The workspace shows the situation, the
 current assessment, the **one next piece of evidence** to collect, and a compact
 audit trail.
 
-Kyumei is an independent project, not affiliated with Temporal Technologies, Inc.
+Durable Inquiry is an independent project, not affiliated with Temporal Technologies, Inc.
 
 ```bash
-cargo run -p kyumei -- serve --demo 3
+cargo run -p durable-inquiry -- serve --demo 3
 ```
 
 Then open <http://127.0.0.1:7373/>. `--demo 3` preloads the reference investigation
@@ -33,7 +37,7 @@ workspace to finish the investigation.
 
 ## What it does
 
-- **Opens an investigation from a description.** "What are you seeing?" Kyumei
+- **Opens an investigation from a description.** "What are you seeing?" Durable Inquiry
   recognises the symptom, records the description as evidence `E0`, and reads
   quantities like "about 30 seconds" as *operator assertions*. Server version, SDK,
   namespace, Task Queue, window and topology are optional; unknown stays unknown.
@@ -45,12 +49,12 @@ workspace to finish the investigation.
 - **Ingests evidence without destroying it.** Supported: Prometheus API JSON,
   exposition text, CSV exports, `timestamp value` series, DescribeTaskQueue JSON and
   CLI tables, dynamic-config YAML, logs, screenshots (metadata only), typed values
-  and written observations, and Kyumei sample blocks. The raw submission is kept
-  byte for byte. Kyumei's reading of it sits beside it and can be corrected
+  and written observations, and Durable Inquiry sample blocks. The raw submission is kept
+  byte for byte. Durable Inquiry's reading of it sits beside it and can be corrected
   without touching it.
 - **Reads metrics itself, or through a companion.** Started with a Prometheus
-  or Grafana endpoint, Kyumei runs a request's queries when you press *Collect
-  now*. Where it cannot reach them, `kyumei-collect`, a small read-only binary
+  or Grafana endpoint, Durable Inquiry runs a request's queries when you press *Collect
+  now*. Where it cannot reach them, `durable-inquiry-collect`, a small read-only binary
   with no model, agents or knowledge, runs the request's code where the metrics
   can be read. It prints a compact, checksummed block of the samples to paste
   back. Values stay exact unless you ask for rounding. See
@@ -65,7 +69,8 @@ workspace to finish the investigation.
   standing (observed, asserted or simulated), their source evidence and the
   knowledge claims used.
 - **Checks whether a cause is big enough.** Once the evidence calibrates it,
-  Kyumei simulates the cause alone with [tempdes](https://github.com/iw/tempdes)
+  Durable Inquiry simulates the cause alone with
+  [Durable Envision](https://github.com/iw/durable-envision)
   and compares the latency it gives with the one observed. The result is a
   simulated fact: it can support or weaken a hypothesis, never settle one. See
   [docs/operator-guide.md](docs/operator-guide.md#simulations).
@@ -74,7 +79,7 @@ workspace to finish the investigation.
   dashboard panels of
   [tsurdilo/temporal-server-operations](https://github.com/tsurdilo/temporal-server-operations)
   that bear on it, cited at a pinned commit with the versions the repository
-  declares. Given your Grafana dashboards, Kyumei draws evidence as the
+  declares. Given your Grafana dashboards, Durable Inquiry draws evidence as the
   matching panel does (its unit, legend and thresholds), opens every linked
   panel with live data from your Prometheus, and checks the panels' queries
   against what it knows about the metrics. See
@@ -84,7 +89,7 @@ workspace to finish the investigation.
   to offer and environment profiles that fill in a new investigation, whose
   window starts as the last hour. See
   [docs/operator-guide.md](docs/operator-guide.md#configuration-and-data).
-- **Draws diagrams from the same state as the text.** Kyumei derives a diagnostic
+- **Draws diagrams from the same state as the text.** Durable Inquiry derives a diagnostic
   path, a system path and an evidence-relationship graph as a typed IR. It
   validates them and renders them as accessible SVG with text fallbacks. A model
   may propose a diagram type and focus, never its contents.
@@ -94,7 +99,7 @@ workspace to finish the investigation.
   and continue where you were.
 - **Shows provenance.** Every metric, configuration key, API field and behaviour
   records the Temporal versions it was verified against, with repository, revision,
-  path, line and verbatim excerpt. `kyumei knowledge verify` re-checks them against
+  path, line and verbatim excerpt. `durable-inquiry knowledge verify` re-checks them against
   local checkouts. Every dynamic configuration setting and server metric of
   Temporal Server 1.27.0 to 1.32.1, and the metrics of the Core, Go and Java
   SDKs, are generated from the source, and each says the releases it holds in.
@@ -108,7 +113,7 @@ workspace to finish the investigation.
 
 A batch job signals every open order workflow. Workflow Task schedule-to-start on
 `order-fulfillment` climbs to about 30 seconds while Workers have plenty of free
-slots. Kyumei:
+slots. Durable Inquiry:
 
 1. rules out Worker execution capacity (free slots never dropped below 1,071);
 2. finds pollers busy, so poller starvation is *supported* rather than ruled out;
@@ -130,12 +135,12 @@ See [docs/reference-investigation.md](docs/reference-investigation.md). To repla
 no model and no server:
 
 ```bash
-cargo run -p kyumei -- replay
+cargo run -p durable-inquiry -- replay
 ```
 
 Add `--durable` to replay it on Odori workflows instead.
 
-In the browser, `cargo run -p kyumei -- serve --demo 3 --demo-fixture activity-worker-rate-limit`
+In the browser, `cargo run -p durable-inquiry -- serve --demo 3 --demo-fixture activity-worker-rate-limit`
 opens the reference investigation after its first three steps, at the evidence that turns it.
 The page shows the symptom, the next request and how to collect it, each instruction with
 the claims it rests on, and the trail so far:
@@ -156,7 +161,7 @@ with the evidence behind it; and the paths through the diagnostic and through th
 
 <p align="center">
   <img src="docs/images/session-3-assessment.png" width="780"
-       alt="The current assessment: what Kyumei knows, the hypotheses established and those ruled out">
+       alt="The current assessment: what Durable Inquiry knows, the hypotheses established and those ruled out">
 </p>
 
 <p align="center">
@@ -166,7 +171,7 @@ with the evidence behind it; and the paths through the diagnostic and through th
 
 ## Diagnostics and fixtures
 
-Kyumei recognises twelve symptoms. Each has a reference fixture and at least one
+Durable Inquiry recognises twelve symptoms. Each has a reference fixture and at least one
 branch, replayed step by step with the expected states, findings and next
 request after every submission:
 
@@ -186,7 +191,7 @@ request after every submission:
 | Java Workflow thread exhaustion | `java-signal-handler-threads`: Signal handlers that wait hold every Workflow thread | `java-cache-fills-threads` |
 
 `visibility-collected-blocks` replays the visibility reference investigation with
-every answer pasted as a `kyumei-collect` sample block instead of query output.
+every answer pasted as a `durable-inquiry-collect` sample block instead of query output.
 `activity-worker-rate-limit-cli` answers the Activity reference investigation's
 Matching request with the Temporal CLI's JSON alone: it has no rate limit, but
 each poller row carries the rate its Worker sends.
@@ -199,52 +204,52 @@ dispatch back.
 Replay any of them by name, or preload them into the workspace:
 
 ```bash
-cargo run -p kyumei -- replay activity-worker-rate-limit
+cargo run -p durable-inquiry -- replay activity-worker-rate-limit
 ```
 
 ```bash
-cargo run -p kyumei -- serve --demo 3 --demo-fixture activity-worker-rate-limit --demo-fixture namespace-rate-limit-surge
+cargo run -p durable-inquiry -- serve --demo 3 --demo-fixture activity-worker-rate-limit --demo-fixture namespace-rate-limit-surge
 ```
 
 ## Workspace
 
 | Crate | Responsibility |
 | --- | --- |
-| `kyumei-domain` | Pure model: investigations as event logs, evidence, observations, hypotheses, findings, conclusions, provenance, epistemic status |
-| `kyumei-knowledge` | Loads and strictly validates versioned knowledge packs; condition language; provenance re-verification |
-| `kyumei-evidence` | Ingestion and normalisation; raw evidence preserved; signal binding |
-| `kyumei-diagnostics` | The deterministic engine: facts, rules, states, next request, conclusions, explanations, diagram builders |
-| `kyumei-diagrams` | Typed diagram IR, validation, SVG and text rendering, time series charts |
-| `kyumei-dashboards` | Grafana dashboards: panels, their queries, units, thresholds and legends; cross-checks |
-| `kyumei-app` | Commands, the `InvestigationService` port, workspace view model, Markdown export, fixture replay, collection plans |
-| `kyumei-odori` | Durable investigation workflow, activities, explanation agent |
-| `kyumei-web` | Topcoat interface (the only crate that knows Topcoat), and Collect now |
-| `kyumei-samples` | The sample block format and request codes, with no dependency on the rest of Kyumei |
-| `kyumei-collect` | The companion: a read-only Prometheus and Grafana client, and the `kyumei-collect` binary |
-| `kyumei-sim` | Simulated clusters: tempdes runs scraped as Prometheus scrapes them, the PromQL Kyumei's requests use answered over the scrapes, and the scenario for the "big enough?" check (the only crate that runs tempdes) |
-| `kyumei` | The `kyumei` binary |
-| `kyumei-extract` | Maintainer tools: generate knowledge claims from Temporal and SDK source (`gen-dc-claims`, `gen-metric-claims`, `gen-sdk-metric-claims`), reading dynamic configuration with tempdes's parser |
-| `kyumei-demo` | The demo's Temporal application: Workers and a load generator on Temporal's Rust SDK, for Kyumei to investigate, with no dependency on the rest of Kyumei |
+| `durable-inquiry-domain` | Pure model: investigations as event logs, evidence, observations, hypotheses, findings, conclusions, provenance, epistemic status |
+| `durable-inquiry-knowledge` | Loads and strictly validates versioned knowledge packs; condition language; provenance re-verification |
+| `durable-inquiry-evidence` | Ingestion and normalisation; raw evidence preserved; signal binding |
+| `durable-inquiry-diagnostics` | The deterministic engine: facts, rules, states, next request, conclusions, explanations, diagram builders |
+| `durable-inquiry-diagrams` | Typed diagram IR, validation, SVG and text rendering, time series charts |
+| `durable-inquiry-dashboards` | Grafana dashboards: panels, their queries, units, thresholds and legends; cross-checks |
+| `durable-inquiry-app` | Commands, the `InvestigationService` port, workspace view model, Markdown export, fixture replay, collection plans |
+| `durable-inquiry-odori` | Durable investigation workflow, activities, explanation agent |
+| `durable-inquiry-web` | Topcoat interface (the only crate that knows Topcoat), and Collect now |
+| `durable-inquiry-samples` | The sample block format and request codes, with no dependency on the rest of Durable Inquiry |
+| `durable-inquiry-collect` | The companion: a read-only Prometheus and Grafana client, and the `durable-inquiry-collect` binary |
+| `durable-inquiry-sim` | Simulated clusters: Durable Envision runs scraped as Prometheus scrapes them, the PromQL Durable Inquiry's requests use answered over the scrapes, and the scenario for the "big enough?" check (the only crate that runs Durable Envision) |
+| `durable-inquiry` | The `durable-inquiry` binary |
+| `durable-inquiry-extract` | Maintainer tools: generate knowledge claims from Temporal and SDK source (`gen-dc-claims`, `gen-metric-claims`, `gen-sdk-metric-claims`), reading dynamic configuration with Durable Envision's parser |
+| `durable-inquiry-demo` | The demo's Temporal application: Workers and a load generator on Temporal's Rust SDK, for Durable Inquiry to investigate, with no dependency on the rest of Durable Inquiry |
 
 Knowledge lives in `knowledge/temporal/1.31/`. Fixtures live in
 `fixtures/investigations/`.
 
-`demo/` holds the [demo](demo/RUNBOOK.md): a Docker Compose stack, Kyumei's
-profiles for it, and the `kyumei-demo` crate.
+`demo/` holds the [demo](demo/RUNBOOK.md): a Docker Compose stack, Durable Inquiry's
+profiles for it, and the `durable-inquiry-demo` crate.
 
 ## Documentation
 
-- [Operator guide](docs/operator-guide.md): running Kyumei and working an
+- [Operator guide](docs/operator-guide.md): running Durable Inquiry and working an
   investigation.
 - [The reference investigation](docs/reference-investigation.md): the Signal-flood
   scenario, step by step.
 - [The demo runbook](demo/RUNBOOK.md): two live incidents with one symptom, on
-  Temporal Server in Docker Compose, which Kyumei tells apart.
+  Temporal Server in Docker Compose, which Durable Inquiry tells apart.
 - [Architecture](docs/architecture.md): crates, the event log, the engine,
   durability on Odori.
 - [Knowledge](docs/knowledge.md): pack format, provenance, verification and
   validation.
-- [Collecting metrics](docs/collector.md): Collect now, the `kyumei-collect`
+- [Collecting metrics](docs/collector.md): Collect now, the `durable-inquiry-collect`
   companion, request codes and the sample block format.
 - [Decisions and known limitations](docs/decisions.md).
 - [Contributing](CONTRIBUTING.md) and the [security policy](SECURITY.md).
@@ -253,31 +258,31 @@ profiles for it, and the `kyumei-demo` crate.
 ## Commands
 
 ```bash
-kyumei serve [--addr 127.0.0.1:7373] [--data-dir DIR] [--config FILE] [--demo N]
-             [--explainer none|claude|codex] [--in-process]
-             [--prometheus-url URL] [--grafana-url URL [--grafana-datasource UID]]
-             [--dashboards DIR]
-kyumei dashboards check DIR
-kyumei replay [FIXTURE] [--durable]
-kyumei-collect --code CODE [--set NAME=VALUE …] (--url URL | --grafana URL --datasource UID)
-               [--round N] [--redact LABEL,…] [--qr]
-kyumei-collect encode FILE… --code CODE
-kyumei-collect decode [FILE]
-kyumei knowledge check
-kyumei knowledge verify --source temporal-server-v1.31.0=../temporal --source …
-kyumei knowledge updates [--json]
-cargo run -p kyumei-extract --bin gen-dc-claims -- ../temporal [--sweep ../temporal-1.27.0 …] \
+durable-inquiry serve [--addr 127.0.0.1:7373] [--data-dir DIR] [--config FILE] [--demo N]
+                      [--explainer none|claude|codex] [--in-process]
+                      [--prometheus-url URL] [--grafana-url URL [--grafana-datasource UID]]
+                      [--dashboards DIR]
+durable-inquiry dashboards check DIR
+durable-inquiry replay [FIXTURE] [--durable]
+durable-inquiry-collect --code CODE [--set NAME=VALUE …] (--url URL | --grafana URL --datasource UID)
+                        [--round N] [--redact LABEL,…] [--qr]
+durable-inquiry-collect encode FILE… --code CODE
+durable-inquiry-collect decode [FILE]
+durable-inquiry knowledge check
+durable-inquiry knowledge verify --source temporal-server-v1.31.0=../temporal --source …
+durable-inquiry knowledge updates [--json]
+cargo run -p durable-inquiry-extract --bin gen-dc-claims -- ../temporal [--sweep ../temporal-1.27.0 …] \
   [-o knowledge/temporal/1.31/generated/dynamic-config.toml | --check …]
-cargo run -p kyumei-extract --bin gen-metric-claims -- ../temporal [--sweep ../temporal-1.27.0 …] \
+cargo run -p durable-inquiry-extract --bin gen-metric-claims -- ../temporal [--sweep ../temporal-1.27.0 …] \
   [-o knowledge/temporal/1.31/generated/server-metrics.toml | --check …] [--emitters FILE]
-cargo run -p kyumei-extract --bin gen-sdk-metric-claims -- --core ../sdk-rust \
+cargo run -p durable-inquiry-extract --bin gen-sdk-metric-claims -- --core ../sdk-rust \
   --go "$(go env GOMODCACHE)/go.temporal.io/sdk@v1.44.0" --java ../sdk-java \
   [-o knowledge/temporal/1.31/generated/sdk-metrics.toml | --check …]
 ```
 
 ## The explainer and Odori
 
-Kyumei's explanations are deterministic: the engine writes each one from the
+Durable Inquiry's explanations are deterministic: the engine writes each one from the
 assessment, so the same evidence always reads the same way. The explainer is
 off by default. With `--explainer claude` or `--explainer codex`, a model
 rewords the explanations through the authenticated Claude Code or Codex CLI.
@@ -291,7 +296,7 @@ a minimal Rust agent framework with durable execution, part of the
 [Tokeira](https://tokeira.io) project. Odori runs on the
 [tokeira engine](https://github.com/tokeira/tokeira), an embeddable durable
 execution engine compatible with Temporal, through the Temporal Rust SDK.
-`kyumei serve` runs on Odori by default, which gives Kyumei:
+`durable-inquiry serve` runs on Odori by default, which gives Durable Inquiry:
 
 - **Durable investigations.** Each investigation is a workflow on the embedded
   engine. Evidence and corrections arrive as workflow updates, the diagnosis runs
@@ -300,10 +305,10 @@ execution engine compatible with Temporal, through the Temporal Rust SDK.
 - **The explainer**, as an agent child workflow of the investigation, with the
   model's CLI working in an empty sandbox directory.
 
-Without Odori, `kyumei serve --in-process` runs the same investigations in
+Without Odori, `durable-inquiry serve --in-process` runs the same investigations in
 process, journalled as JSON in the data directory, with the same diagnostics,
 evidence and simulations. Its explanations are the deterministic ones: the
-explainer needs Odori, so Kyumei refuses `--explainer` with `--in-process`.
+explainer needs Odori, so Durable Inquiry refuses `--explainer` with `--in-process`.
 
 ## Testing
 
@@ -341,17 +346,17 @@ between engine snapshots, and submits evidence larger than a gRPC message.
 To re-verify every provenance excerpt against local checkouts:
 
 ```bash
-KYUMEI_VERIFY_SOURCES="temporal-server-v1.31.0=/path/to/temporal;sdk-core-acac9e3f=/path/to/sdk-rust;…" \
-  cargo test -p kyumei-knowledge provenance
+DURABLE_INQUIRY_VERIFY_SOURCES="temporal-server-v1.31.0=/path/to/temporal;sdk-core-acac9e3f=/path/to/sdk-rust;…" \
+  cargo test -p durable-inquiry-knowledge provenance
 ```
 
 To check that the generated dynamic configuration, server metrics and SDK metrics
 still match their sources:
 
 ```bash
-KYUMEI_TEMPORAL_SOURCE=/path/to/temporal \
-  KYUMEI_SDK_SOURCES="core=/path/to/sdk-rust;go=/path/to/sdk-go;java=/path/to/sdk-java" \
-  cargo test -p kyumei-extract --test up_to_date
+DURABLE_INQUIRY_TEMPORAL_SOURCE=/path/to/temporal \
+  DURABLE_INQUIRY_SDK_SOURCES="core=/path/to/sdk-rust;go=/path/to/sdk-go;java=/path/to/sdk-java" \
+  cargo test -p durable-inquiry-extract --test up_to_date
 ```
 
 With a checkout of tsurdilo/temporal-server-operations at `5a71c36`, these
@@ -359,12 +364,12 @@ read its dashboards, draw every fixture's evidence as their panels, and verify
 every reference:
 
 ```bash
-KYUMEI_OPERATIONS_SOURCE=/path/to/temporal-server-operations \
-  cargo test -p kyumei-dashboards -p kyumei-app -- --nocapture
+DURABLE_INQUIRY_OPERATIONS_SOURCE=/path/to/temporal-server-operations \
+  cargo test -p durable-inquiry-dashboards -p durable-inquiry-app -- --nocapture
 ```
 
 ```bash
-cargo run -p kyumei -- knowledge verify \
+cargo run -p durable-inquiry -- knowledge verify \
   --source temporal-server-operations-5a71c36=/path/to/temporal-server-operations
 ```
 
@@ -373,16 +378,16 @@ infinities, -0, gaps and counter resets included), point the opt-in test at a
 Prometheus:
 
 ```bash
-KYUMEI_PROMETHEUS_URL=http://127.0.0.1:9090 \
-  cargo test -p kyumei-collect --test real_prometheus -- --ignored --nocapture
+DURABLE_INQUIRY_PROMETHEUS_URL=http://127.0.0.1:9090 \
+  cargo test -p durable-inquiry-collect --test real_prometheus -- --ignored --nocapture
 ```
 
 A durable test that hangs never reports, so libtest discards its output. To
 keep the engine and worker logs of such a run in a file:
 
 ```bash
-KYUMEI_TEST_LOG=/tmp/kyumei-durable.log RUST_LOG=kyumei_odori=info,warn \
-  cargo test -p kyumei-odori --test durable_golden
+DURABLE_INQUIRY_TEST_LOG=/tmp/durable-inquiry-durable.log RUST_LOG=durable_inquiry_odori=info,warn \
+  cargo test -p durable-inquiry-odori --test durable_golden
 ```
 
 ## Requirements
@@ -395,9 +400,9 @@ KYUMEI_TEST_LOG=/tmp/kyumei-durable.log RUST_LOG=kyumei_odori=info,warn \
 
 ## Security
 
-Kyumei has no authentication. Anyone who can reach it can read and change its
+Durable Inquiry has no authentication. Anyone who can reach it can read and change its
 investigations and, when it is started with a Prometheus or Grafana endpoint,
-have it run its requests' queries with that endpoint's credentials. `kyumei serve`
+have it run its requests' queries with that endpoint's credentials. `durable-inquiry serve`
 listens on 127.0.0.1 unless `--addr` says otherwise: run it where only people you
 trust can reach it, or behind a proxy that authenticates them. To report a
 vulnerability, see [SECURITY.md](SECURITY.md).
@@ -410,34 +415,44 @@ release from 1.27.0 checked by the version sweep; twelve diagnostics (Workflow
 Task and Activity schedule-to-start, persistence latency, ResourceExhausted,
 Workflow Task failures, history limits, Workflow cache misses, History task
 lag, History's Workflow cache, shard ownership churn, visibility lag and
-errors, Java Workflow thread exhaustion) and thirty-eight fixtures. Kyumei
+errors, Java Workflow thread exhaustion) and thirty-eight fixtures. Durable Inquiry
 reads metrics from Prometheus or Grafana when it can reach them, and from
-`kyumei-collect` sample blocks when it cannot. Its diagnostics link 98 runbooks,
+`durable-inquiry-collect` sample blocks when it cannot. Its diagnostics link 98 runbooks,
 playbook sections and panels of [tsurdilo/temporal-server-operations](#temporal-server-operations), and it
 draws evidence as your Grafana dashboards' panels do. Known limitations, and
-the decisions behind Kyumei's design, are in
+the decisions behind Durable Inquiry's design, are in
 [docs/decisions.md](docs/decisions.md).
 
 ## Temporal server operations
 
-Kyumei's runbooks and dashboard panels come from
+Durable Inquiry's runbooks and dashboard panels come from
 [tsurdilo/temporal-server-operations](https://github.com/tsurdilo/temporal-server-operations)
 by [@tsurdilo](https://github.com/tsurdilo): playbooks, alert runbooks and Grafana
-dashboards for operating self-hosted Temporal. Kyumei's diagnoses, hypotheses and
+dashboards for operating self-hosted Temporal. Durable Inquiry's diagnoses, hypotheses and
 requests link 98 of its [alert runbooks](https://github.com/tsurdilo/temporal-server-operations/tree/5a71c3656cc0bca831b61142b64c3672cc974b1b/observability/alerts),
 [playbook sections](https://github.com/tsurdilo/temporal-server-operations/tree/5a71c3656cc0bca831b61142b64c3672cc974b1b/playbooks) and [dashboard panels](https://github.com/tsurdilo/temporal-server-operations/tree/5a71c3656cc0bca831b61142b64c3672cc974b1b/observability/dashboards),
 cited at commit [`5a71c36`](https://github.com/tsurdilo/temporal-server-operations/tree/5a71c3656cc0bca831b61142b64c3672cc974b1b) with the versions the repository declares. Given your
-copy of the dashboards, Kyumei draws evidence as the matching panel does and opens each
+copy of the dashboards, Durable Inquiry draws evidence as the matching panel does and opens each
 linked panel with live data from your Prometheus.
 
-The repository has no licence, so Kyumei includes none of its content. It cites and
+The repository has no licence, so Durable Inquiry includes none of its content. It cites and
 links each reference, and reads dashboards only from the copy you give it. See
 [docs/operator-guide.md](docs/operator-guide.md#dashboards-and-runbooks) and
 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
+## Related projects
+
+Durable Inquiry finds out why a deployment that is already running misbehaves. Two sister
+projects look at the workflows' code, and at a cluster before it reaches production:
+
+- [Durable Atlas](https://github.com/iw/durable-atlas), diagrams of Temporal workflows read
+  from their Kotlin source, with recorded executions laid over them.
+- [Durable Envision](https://github.com/iw/durable-envision), a discrete-event simulator that
+  surfaces hotspots in Temporal Server clusters on EKS before they show up in production.
+
 ## Built with Claude
 
-Kyumei was built by [Claude](https://www.anthropic.com/claude), the AI model made by
+Durable Inquiry was built by [Claude](https://www.anthropic.com/claude), the AI model made by
 [Anthropic](https://www.anthropic.com), working through
 [Claude Code](https://claude.com/claude-code). Claude wrote the Rust workspace, read
 Temporal's sources for the knowledge packs and cited every claim to the line it rests
@@ -452,7 +467,7 @@ Claude's alone.
 
 ## Licence
 
-Kyumei is licensed under the [Apache License, Version 2.0](LICENSE). The
+Durable Inquiry is licensed under the [Apache License, Version 2.0](LICENSE). The
 knowledge packs quote short excerpts of Temporal's and other projects' sources as
 provenance; [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) names them and their
 licences.

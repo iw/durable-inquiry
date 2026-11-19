@@ -1,14 +1,14 @@
-# Elasticsearch slow to write, answered with kyumei-collect sample blocks.
+# Elasticsearch slow to write, answered with durable-inquiry-collect sample blocks.
 #
 # The investigation of visibility-es-slow-writes, where every answer is a
-# block pasted from kyumei-collect rather than query output: the operator
+# block pasted from durable-inquiry-collect rather than query output: the operator
 # copies each request's command, saves the query output from Grafana's query
-# inspector, encodes it with `kyumei-collect encode FILE… --code CODE` and
+# inspector, encodes it with `durable-inquiry-collect encode FILE… --code CODE` and
 # pastes the block it prints. The blocks hold that fixture's samples exactly,
 # under each request's own queries, so the investigation reaches the same
 # diagnosis by the same path.
 #
-# The blocks are made by crates/kyumei/tests/collected_blocks.rs, from that
+# The blocks are made by crates/durable-inquiry/tests/collected_blocks.rs, from that
 # fixture's query output and, for the store errors and visibility DLQ writes
 # (a Grafana CSV export there), from sources/: the same values as Prometheus
 # returns them, one file per query.
@@ -16,7 +16,7 @@
 [fixture]
 id = "visibility-collected-blocks"
 title = "Elasticsearch slow to write, answered with sample blocks"
-description = "The visibility reference fixture with every answer pasted as a kyumei-collect sample block."
+description = "The visibility reference fixture with every answer pasted as a durable-inquiry-collect sample block."
 investigation = "inv-golden-visibility-blocks"
 
 [open]

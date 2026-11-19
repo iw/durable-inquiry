@@ -8,7 +8,7 @@ Each pack's `generated/dynamic-config.toml` holds the key, default and descripti
 dynamic configuration setting, which `gen-dc-claims` extracts from the Temporal source, and its
 `generated/server-metrics.toml` holds the name and description of every server metric, which
 `gen-metric-claims` extracts the same way. Other claims quote short excerpts as provenance.
-Kyumei contains no Temporal code.
+Durable Inquiry contains no Temporal code.
 
 ```text
 The MIT License
@@ -67,12 +67,13 @@ from their sources as provenance. So do the claims about how metrics are exporte
 Each source is named, with its repository and revision, in each pack's
 `sources/sources.toml`.
 
-## tempdes
+## Durable Envision
 
-`crates/kyumei-extract/src/registry_gen.rs` and `crates/kyumei-extract/src/registry.rs` are
-copied from tempdes (`src/config/registry_gen.rs` and `src/config/dynamic.rs` at `848fa47`).
-Copyright (c) 2026 The tempdes contributors. tempdes is licensed under MIT OR Apache-2.0;
-Kyumei uses this code under the Apache License, Version 2.0.
+`crates/durable-inquiry-extract/src/registry_gen.rs` and `crates/durable-inquiry-extract/src/registry.rs` are
+copied from [Durable Envision](https://github.com/iw/durable-envision), which was called
+tempdes then (`src/config/registry_gen.rs` and `src/config/dynamic.rs` at `848fa47`).
+Copyright (c) 2026 The tempdes contributors. Durable Envision is licensed under MIT OR
+Apache-2.0; Durable Inquiry uses this code under the Apache License, Version 2.0.
 
 ## Temporal server operations
 
@@ -80,15 +81,15 @@ Kyumei uses this code under the Apache License, Version 2.0.
 playbooks and Grafana dashboards of
 [tsurdilo/temporal-server-operations](https://github.com/tsurdilo/temporal-server-operations)
 at commit `5a71c3656cc0bca831b61142b64c3672cc974b1b`. The repository has no
-licence, so Kyumei includes none of its content: each reference gives the path,
+licence, so Durable Inquiry includes none of its content: each reference gives the path,
 the section heading or the dashboard uid and panel id, and the title, to cite
-it, and links to it. Kyumei reads dashboards only from a copy the operator
+it, and links to it. Durable Inquiry reads dashboards only from a copy the operator
 supplies. Besides titles and headings, a reference quotes the line that declares
 a version (a dashboard's title, or a row of the playbooks index), to cite it.
 
 ## Time Zone Database
 
-Kyumei's binary carries the [IANA Time Zone Database](https://www.iana.org/time-zones),
+Durable Inquiry's binary carries the [IANA Time Zone Database](https://www.iana.org/time-zones),
 through the `jiff-tzdb` crate, to show times in the operator's zone. The
 database is in the public domain.
 

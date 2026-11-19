@@ -1,16 +1,16 @@
 # The reference investigation
 
-`fixtures/investigations/signal-flood-wft-latency/` is the investigation Kyumei
+`fixtures/investigations/signal-flood-wft-latency/` is the investigation Durable Inquiry
 was built around. It runs end to end with no model and no server:
 
 ```bash
-cargo run -p kyumei -- replay              # in process
-cargo run -p kyumei -- replay --durable    # on Odori workflows
+cargo run -p durable-inquiry -- replay              # in process
+cargo run -p durable-inquiry -- replay --durable    # on Odori workflows
 ```
 
-`crates/kyumei-app/tests/golden.rs` replays it and checks every intermediate
-state. `crates/kyumei-web/tests/workspace.rs` drives the same investigation
-through the web interface, and `crates/kyumei-odori/tests/durable_golden.rs`
+`crates/durable-inquiry-app/tests/golden.rs` replays it and checks every intermediate
+state. `crates/durable-inquiry-web/tests/workspace.rs` drives the same investigation
+through the web interface, and `crates/durable-inquiry-odori/tests/durable_golden.rs`
 runs it across an engine restart.
 
 ## The incident
@@ -44,7 +44,7 @@ The operator writes what they see:
 > memory look normal.
 
 They state Temporal Server 1.31.0, Python SDK 1.25.0, the incident window
-13:35–13:50 UTC and the topology. Kyumei then:
+13:35–13:50 UTC and the topology. Durable Inquiry then:
 
 - records the description as evidence `E0`;
 - recognises the symptom "Workflow Task schedule-to-start latency is
@@ -92,7 +92,7 @@ is whether polls reached Matching fast enough.
   pollers is more than 50 per poller per second, so the pollers were rarely
   idle.
 
-Kyumei does not conclude starvation from this. It is a supported hypothesis,
+Durable Inquiry does not conclude starvation from this. It is a supported hypothesis,
 not an established one.
 
 ### 3. Poll failures and throttling
@@ -223,7 +223,7 @@ this diagnostic:
 
 The other diagnostics' reference and branch fixtures are listed in the
 [README](../README.md#diagnostics-and-fixtures). Every fixture also replays on
-Odori, on one engine, in `crates/kyumei-odori/tests/durable_golden.rs`.
+Odori, on one engine, in `crates/durable-inquiry-odori/tests/durable_golden.rs`.
 
 `tests/fixtures.rs` also checks four behaviours:
 
@@ -237,7 +237,7 @@ Odori, on one engine, in `crates/kyumei-odori/tests/durable_golden.rs`.
 ## Trying it in the interface
 
 ```bash
-cargo run -p kyumei -- serve --demo 3
+cargo run -p durable-inquiry -- serve --demo 3
 ```
 
 This opens <http://127.0.0.1:7373/> with the investigation after step 3. Paste

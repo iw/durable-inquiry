@@ -1,4 +1,4 @@
-# Kyumei contributor guidance
+# Durable Inquiry contributor guidance
 
 These instructions are for coding agents working in this repository, and apply to all of
 it. Read [README.md](README.md) first, then [docs/architecture.md](docs/architecture.md)
@@ -6,9 +6,9 @@ and [docs/knowledge.md](docs/knowledge.md) before changing a crate's boundaries 
 knowledge pack's format. [docs/decisions.md](docs/decisions.md) says why things are as
 they are.
 
-## What Kyumei is
+## What Durable Inquiry is
 
-Kyumei helps an operator find out why a running Temporal deployment is misbehaving. It
+Durable Inquiry helps an operator find out why a running Temporal deployment is misbehaving. It
 keeps competing hypotheses open, asks for the one piece of evidence that best tells them
 apart, and traces every conclusion to the evidence behind it. Keep it that way:
 
@@ -18,7 +18,7 @@ apart, and traces every conclusion to the evidence behind it. Keep it that way:
 - Reasoning is deterministic. A model may reword an explanation, which is then checked
   against the assessment. It never decides a fact, a rule's outcome or a diagram's
   content.
-- Kyumei is not a dashboard and not a chatbot. It shows metrics inside Kyumei, drawn as
+- Durable Inquiry is not a dashboard and not a chatbot. It shows metrics inside Durable Inquiry, drawn as
   the matching Grafana panel would draw them, rather than sending the operator elsewhere
   to see them.
 
@@ -29,7 +29,7 @@ apart, and traces every conclusion to the evidence behind it. Keep it that way:
   that source, and cites the path, the line and a verbatim excerpt.
 - Documentation is not verification. A claim known only from documentation is marked
   `unverified`, with the reason.
-- Kyumei's own thresholds are heuristics. They cite the `kyumei-heuristics` source and
+- Durable Inquiry's own thresholds are heuristics. They cite the `durable-inquiry-heuristics` source and
   are never presented as Temporal behaviour.
 - [tsurdilo/temporal-server-operations](https://github.com/tsurdilo/temporal-server-operations)
   has no licence. Cite and link its runbooks, playbooks and dashboards; never copy their
@@ -39,20 +39,44 @@ apart, and traces every conclusion to the evidence behind it. Keep it that way:
 
 The Workspace table in the README says what each crate owns.
 
-- `kyumei-domain` is the pure model, with no I/O.
+- `durable-inquiry-domain` is the pure model, with no I/O.
 - Diagnosis runs in activities, never in workflow code, and commands reach an
-  investigation as workflow updates (`kyumei-odori`). The in-process service
+  investigation as workflow updates (`durable-inquiry-odori`). The in-process service
   (`--in-process`) must reach the same assessments.
-- `knowledge/temporal/*/generated/` is produced by the `kyumei-extract` generators. Never
+- `knowledge/temporal/*/generated/` is produced by the `durable-inquiry-extract` generators. Never
   edit it by hand: change the generator and regenerate.
-- tempdes is used only through `kyumei-sim`, pinned by Git revision. Don't copy its code.
+- Durable Envision is used only through `durable-inquiry-sim`, pinned by Git revision. Don't copy its code.
 - A new dependency is a design decision, and a Git dependency needs a pinned revision.
+
+## Names from before the rename
+
+Durable Inquiry was called Kyumei. A few names keep that spelling, because something
+written earlier depends on each of them. Don't rename them:
+
+- the sample block format's markers (`KYUMEI SAMPLES`, the magic `KYS`) and the request
+  code's prefix (`kyq1.`), in `durable-inquiry-samples`: collectors and applications of
+  different releases read each other's output;
+- the task queues `kyumei-investigations` and `kyumei-agents` and the agent
+  `kyumei-explainer`, which the engine's snapshot records for every investigation;
+- the time zone cookie `kyumei_tz`, which browsers hold;
+- the simulated scenario's namespace and Task Queue, `kyumei`: the simulator hashes
+  names, so others would give other numbers.
+
+Durable Envision is pinned to a commit where its package is named `tempdes`. The
+dependency's `package` in `Cargo.toml`, the profile key and `Cargo.lock` keep that name
+until the pin moves.
+
+Elsewhere the earlier name appears only in the README's sentence about it, in "Upgrading
+from Kyumei" in the operator guide, in the hints for a variable or directory left under
+it, and in fixtures recorded then (`fixtures/recorded/` and the sample blocks of
+`visibility-collected-blocks`), which stay as recorded. These are the exceptions to the
+writing rule about history below.
 
 ## Knowledge changes
 
 - A new or changed claim needs its verification method and date, and provenance with the
   path, line and excerpt from a pinned source. Its scope lists the releases it holds in.
-- Run `kyumei knowledge check`, and `kyumei knowledge verify --source <id>=<path> …` for
+- Run `durable-inquiry knowledge check`, and `durable-inquiry knowledge verify --source <id>=<path> …` for
   every source you have locally; [docs/knowledge.md](docs/knowledge.md) shows how.
 - When a diagnosis changes, add or update a fixture under `fixtures/investigations/`.
   Every fixture replays in process and on Odori.
@@ -86,7 +110,7 @@ Run from the repository root before asking for a commit:
 cargo fmt --check
 cargo clippy --workspace --all-targets --locked -- -D warnings
 cargo test --workspace --locked
-cargo run -p kyumei --locked -- knowledge check
+cargo run -p durable-inquiry --locked -- knowledge check
 ```
 
 CI runs the first three on every push to `main` and every pull request. The test suite
@@ -95,7 +119,7 @@ stalled one.
 
 ## Data and safety
 
-- An operator's Kyumei data directory holds real investigations. Back it up, rehearse on
+- An operator's Durable Inquiry data directory holds real investigations. Back it up, rehearse on
   a copy, and get explicit approval before anything rewrites it. Demos and screenshots
   use a throwaway `--data-dir` and an empty `--config`.
 - Never put credentials, real cluster names, hosts or personal paths in fixtures,

@@ -35,7 +35,7 @@ title = "Core SDK Prometheus metric names"
 statement = "Core's Prometheus exporter exports each metric under its name with the metric prefix (`temporal_` by default). Counters gain `_total` only with `counters_total_suffix`, and histograms gain their unit (`_milliseconds`, or `_seconds` with `use_seconds_for_durations`) only with `unit_suffix`. All three options are off by default."
 notes = [
   "`counters_total_suffix` appends `_total` even to a name that already ends with it, so `local_activity_total` becomes `temporal_local_activity_total_total`.",
-  "Kyumei does not cover Core's OTLP exporter: the names it reaches Prometheus under depend on the collector.",
+  "Durable Inquiry does not cover Core's OTLP exporter: the names it reaches Prometheus under depend on the collector.",
 ]
 scope = { sdk = [{ family = "core", revision = "sdk-rust acac9e3f" }] }
 verification = { status = "verified", method = "source-inspection", on = 2026-10-03 }

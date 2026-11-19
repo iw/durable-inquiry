@@ -1,20 +1,20 @@
 [workspace]
 resolver = "3"
 members = [
-    "crates/kyumei-domain",
-    "crates/kyumei-knowledge",
-    "crates/kyumei-evidence",
-    "crates/kyumei-samples",
-    "crates/kyumei-collect",
-    "crates/kyumei-diagrams",
-    "crates/kyumei-dashboards",
-    "crates/kyumei-diagnostics",
-    "crates/kyumei-app",
-    "crates/kyumei-odori",
-    "crates/kyumei-sim",
-    "crates/kyumei-extract",
-    "crates/kyumei-web",
-    "crates/kyumei",
+    "crates/durable-inquiry-domain",
+    "crates/durable-inquiry-knowledge",
+    "crates/durable-inquiry-evidence",
+    "crates/durable-inquiry-samples",
+    "crates/durable-inquiry-collect",
+    "crates/durable-inquiry-diagrams",
+    "crates/durable-inquiry-dashboards",
+    "crates/durable-inquiry-diagnostics",
+    "crates/durable-inquiry-app",
+    "crates/durable-inquiry-odori",
+    "crates/durable-inquiry-sim",
+    "crates/durable-inquiry-extract",
+    "crates/durable-inquiry-web",
+    "crates/durable-inquiry",
     "demo",
 ]
 
@@ -23,23 +23,23 @@ version = "0.1.0"
 edition = "2024"
 rust-version = "1.98"
 license = "Apache-2.0"
-repository = "https://github.com/iw/kyumei"
-homepage = "https://github.com/iw/kyumei"
+repository = "https://github.com/iw/durable-inquiry"
+homepage = "https://github.com/iw/durable-inquiry"
 publish = false
 
 [workspace.dependencies]
-kyumei-domain = { path = "crates/kyumei-domain" }
-kyumei-knowledge = { path = "crates/kyumei-knowledge" }
-kyumei-evidence = { path = "crates/kyumei-evidence" }
-kyumei-samples = { path = "crates/kyumei-samples" }
-kyumei-collect = { path = "crates/kyumei-collect" }
-kyumei-diagrams = { path = "crates/kyumei-diagrams" }
-kyumei-dashboards = { path = "crates/kyumei-dashboards" }
-kyumei-diagnostics = { path = "crates/kyumei-diagnostics" }
-kyumei-app = { path = "crates/kyumei-app" }
-kyumei-odori = { path = "crates/kyumei-odori" }
-kyumei-sim = { path = "crates/kyumei-sim" }
-kyumei-web = { path = "crates/kyumei-web" }
+durable-inquiry-domain = { path = "crates/durable-inquiry-domain" }
+durable-inquiry-knowledge = { path = "crates/durable-inquiry-knowledge" }
+durable-inquiry-evidence = { path = "crates/durable-inquiry-evidence" }
+durable-inquiry-samples = { path = "crates/durable-inquiry-samples" }
+durable-inquiry-collect = { path = "crates/durable-inquiry-collect" }
+durable-inquiry-diagrams = { path = "crates/durable-inquiry-diagrams" }
+durable-inquiry-dashboards = { path = "crates/durable-inquiry-dashboards" }
+durable-inquiry-diagnostics = { path = "crates/durable-inquiry-diagnostics" }
+durable-inquiry-app = { path = "crates/durable-inquiry-app" }
+durable-inquiry-odori = { path = "crates/durable-inquiry-odori" }
+durable-inquiry-sim = { path = "crates/durable-inquiry-sim" }
+durable-inquiry-web = { path = "crates/durable-inquiry-web" }
 
 anyhow = "1"
 async-trait = "0.1"
@@ -76,10 +76,12 @@ temporalio-sdk = "1.0"
 temporalio-workflow = "1.0"
 futures = "0.3"
 
-# tempdes: a discrete-event simulator of Temporal Server clusters, pinned to a
-# commit on its main branch. Only kyumei-sim uses it; kyumei_sim::TEMPDES_COMMIT
-# repeats the rev, and a test checks that the two agree.
-tempdes = { git = "https://github.com/iw/tempdes", rev = "22b8dc97f181c88f70ba723842b293668645f2a8", default-features = false }
+# Durable Envision: a discrete-event simulator of Temporal Server clusters, pinned
+# to a commit on its main branch. Only durable-inquiry-sim runs it;
+# durable_inquiry_sim::DURABLE_ENVISION_COMMIT repeats the rev, and a test checks
+# that the two agree. At this commit its package is named `tempdes`, so the
+# dependency is renamed here and the code says `durable_envision::`.
+durable-envision = { package = "tempdes", git = "https://github.com/iw/durable-envision", rev = "22b8dc97f181c88f70ba723842b293668645f2a8", default-features = false }
 
 [workspace.lints.rust]
 unsafe_code = "forbid"
@@ -94,7 +96,9 @@ dbg_macro = "warn"
 todo = "warn"
 unwrap_used = "warn"
 
-# tempdes simulates a cluster request by request; unoptimised, a test's few
-# simulated minutes would take minutes rather than seconds.
+# Durable Envision simulates a cluster request by request; unoptimised, a test's
+# few simulated minutes would take minutes rather than seconds. A profile is
+# keyed on the package's own name, which is `tempdes` at the pinned commit, not
+# on the name the dependency is given above.
 [profile.dev.package.tempdes]
 opt-level = 3

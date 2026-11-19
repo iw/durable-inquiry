@@ -80,11 +80,11 @@ retrieved = 2026-09-30
 note = "Temporal Server v1.32.0 and v1.32.1 pin this version (go.mod line 71)."
 
 [[source]]
-id = "kyumei-heuristics"
+id = "durable-inquiry-heuristics"
 kind = "authored"
-title = "Kyumei diagnostic heuristics"
+title = "Durable Inquiry diagnostic heuristics"
 retrieved = 2026-09-30
-note = "Thresholds and interpretations chosen by Kyumei's authors. They are judgements, not statements about Temporal."
+note = "Thresholds and interpretations chosen by Durable Inquiry's authors. They are judgements, not statements about Temporal."
 
 [[source]]
 id = "sdk-java-v1.40.0"
@@ -164,7 +164,7 @@ revision = "main"
 commit = "5a71c3656cc0bca831b61142b64c3672cc974b1b"
 committed = 2026-10-09
 retrieved = 2026-10-14
-note = "The repository has no licence, so Kyumei cites it and links to it at this commit, and reads an operator's own copy of its dashboards; it bundles none of its text or dashboards. Its runbooks still link to its earlier name, tsurdilo/temporal-metrics."
+note = "The repository has no licence, so Durable Inquiry cites it and links to it at this commit, and reads an operator's own copy of its dashboards; it bundles none of its text or dashboards. Its runbooks still link to its earlier name, tsurdilo/temporal-metrics."
 
 [[source]]
 id = "temporal-cli-v1.7.0"

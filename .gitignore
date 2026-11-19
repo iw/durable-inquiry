@@ -1,8 +1,8 @@
 /target/
-# Investigation data from `kyumei serve --data-dir .kyumei`.
-/.kyumei/
+# Investigation data from `durable-inquiry serve --data-dir .durable-inquiry`.
+/.durable-inquiry/
 # The demo's investigation data, from demo/RUNBOOK.md.
-/.kyumei-demo/
+/.durable-inquiry-demo/
 *.tmp
 .DS_Store
 # Claude Code's worktrees and local settings.

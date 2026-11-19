@@ -121,7 +121,7 @@ field_type = "repeated temporal.api.taskqueue.v1.PollerInfo"
 unit = "count"
 purpose = "The Workers that polled the Task Queue within matching.PollerHistoryTTL, 5 minutes by default (behaviour.pollers-listed-for-ttl)."
 returned_by = ["DescribeTaskQueue"]
-notes = ["Kyumei counts the list. Protobuf JSON leaves an empty list out, and Kyumei reads a list printed as null as empty."]
+notes = ["Durable Inquiry counts the list. Protobuf JSON leaves an empty list out, and Durable Inquiry reads a list printed as null as empty."]
 scope = { server = ["1.31.0", "1.31.1", "1.31.2", "1.31.3", "1.31.4"] }
 verification = { status = "verified", method = "source-inspection", on = 2026-10-15 }
 provenance = [
