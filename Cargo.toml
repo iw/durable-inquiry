@@ -51,7 +51,7 @@ csv = "1"
 miniz_oxide = "0.9"
 getrandom = "0.4"
 hmac = "0.13"
-jiff = { version = "0.2", features = ["serde", "tzdb-bundle-always"] }
+jiff = { version = "1.0", features = ["serde", "tzdb-bundle-always"] }
 regex = "1"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
@@ -63,7 +63,7 @@ tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["fmt", "env-filter"] }
 uuid = { version = "1", features = ["v4", "serde"] }
 pretty_assertions = "1"
-qrcode = { version = "0.14", default-features = false }
+qrcode = { version = "0.15", default-features = false }
 # Rust TLS, with the system's certificate store and the webpki roots; no OpenSSL.
 reqwest = { version = "0.12", default-features = false, features = ["rustls-tls-native-roots", "rustls-tls-webpki-roots"] }
 
